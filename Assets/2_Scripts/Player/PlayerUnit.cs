@@ -15,9 +15,9 @@ public abstract class PlayerUnit : MonoBehaviour
     {
 
     }
-    public void Move(Transform target)
+    public void Move(Vector3 position)
     {
-        agent.destination = target.position;
+        agent.destination = position;
     }
 }
 

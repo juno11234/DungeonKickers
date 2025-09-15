@@ -3,38 +3,39 @@ using UnityEngine;
 
 public class ControlManager : MonoBehaviour
 {
-    Transform target;
-    LinkedList<PlayerUnit> players;
+    [SerializeField] private PlayerUnit[] allPlayer;
+    private LinkedList<PlayerUnit> _players = new LinkedList<PlayerUnit>();
+    private Camera _mainCam;
+
     void Start()
     {
-
-    }
-
-    void Update()
-    {
-
-    }
-    void MoveControl()
-    {
-        foreach (PlayerUnit playerUnit in players)
+        _mainCam = Camera.main;
+        foreach (PlayerUnit player in allPlayer)
         {
-            playerUnit.Move(target);
+            _players.AddLast(player);
         }
     }
-   public void ShootRay()
+
+    void MoveControl(Vector3 position)
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit))
+        foreach (PlayerUnit playerUnit in _players)
         {
-            // 3. 충돌한 오브젝트 정보 출력
+            playerUnit.Move(position);
+        }
+    }
+
+    public void ShootRay()
+    {
+        Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            MoveControl(hit.point);
+            //. 충돌한 오브젝트 정보 출력
             Debug.Log($"레이가 충돌한 오브젝트: {hit.collider.name}");
-            Debug.Log($"충돌 지점: {hit.point}");       
         }
         else
         {
             Debug.Log("레이가 아무것도 충돌하지 않았습니다.");
         }
-    } 
-
+    }
 }

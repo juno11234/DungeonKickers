@@ -13,6 +13,7 @@ public class InputManager : MonoBehaviour
         control = FindAnyObjectByType<ControlManager>();
 
         playerAction.Move.performed += ctx => control.ShootRay();
+        
     }
     private void OnEnable()
     {

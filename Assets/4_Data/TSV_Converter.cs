@@ -29,7 +29,7 @@ public class TSV_Converter_Improved
 
     private static void ConvertData<T>(string tsvPath, string outDir) where T : BaseDataSO
     {
-        if (File.Exists(tsvPath)==false)
+        if (File.Exists(tsvPath) == false)
         {
             Debug.LogError($"TSV 파일을 찾을 수 없습니다: {tsvPath}");
             return;
@@ -49,7 +49,7 @@ public class TSV_Converter_Improved
             headerMap[headers[i].Trim()] = i;
         }
 
-        if (AssetDatabase.IsValidFolder(outDir)==false)
+        if (AssetDatabase.IsValidFolder(outDir) == false)
         {
             Directory.CreateDirectory(outDir);
             AssetDatabase.Refresh();
@@ -76,6 +76,7 @@ public class TSV_Converter_Improved
             if (TryPopulateData(so, cols, headerMap, out string assetName))
             {
                 string assetPath = $"{outDir}/{assetName}.asset";
+                so.hideFlags = HideFlags.None;
                 AssetDatabase.CreateAsset(so, assetPath);
                 createdCount++;
             }
@@ -91,7 +92,8 @@ public class TSV_Converter_Improved
     }
 
     // SO 타입에 맞게 데이터를 채우고 에셋 이름을 반환하는 함수
-    private static bool TryPopulateData(BaseDataSO so, string[] cols, Dictionary<string, int> headerMap, out string assetName)
+    private static bool TryPopulateData(BaseDataSO so, string[] cols, Dictionary<string, int> headerMap,
+        out string assetName)
     {
         assetName = string.Empty;
 
@@ -142,13 +144,15 @@ public class TSV_Converter_Improved
         return success;
     }
 
-    private static bool TrySetString(string[] cols, Dictionary<string, int> headerMap, string headerName, ref string value)
+    private static bool TrySetString(string[] cols, Dictionary<string, int> headerMap, string headerName,
+        ref string value)
     {
         if (headerMap.TryGetValue(headerName, out int index))
         {
             value = cols[index];
             return true;
         }
+
         return false;
     }
 
@@ -161,10 +165,12 @@ public class TSV_Converter_Improved
                 return true;
             }
         }
+
         return false;
     }
 
-    private static bool TrySetFloat(string[] cols, Dictionary<string, int> headerMap, string headerName, ref float value)
+    private static bool TrySetFloat(string[] cols, Dictionary<string, int> headerMap, string headerName,
+        ref float value)
     {
         if (headerMap.TryGetValue(headerName, out int index))
         {
@@ -173,6 +179,7 @@ public class TSV_Converter_Improved
                 return true;
             }
         }
+
         return false;
     }
 }

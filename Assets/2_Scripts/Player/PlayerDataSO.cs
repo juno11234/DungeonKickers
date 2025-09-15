@@ -1,0 +1,13 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "PlayerData", menuName = "Data/PlayerData")]
+public class PlayerDataSO : ScriptableObject
+{
+    public string job;
+    public int hp;
+    public int attackDamage;
+    public int defence;
+    public int moveSpeed;
+    public float attackSpeed;
+    public int mana;
+}

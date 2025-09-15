@@ -11,15 +11,14 @@ public class MergeSort : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Á¤·Ä Àü: " + string.Join(", ", myList));
-        Debug.Log("Á¤·Ä Àü: " + string.Join(", ", myArray));
+        Debug.Log("ë¦¬ìŠ¤íŠ¸ ì •ë ¬ ì „: " + string.Join(", ", myList));
+        Debug.Log("ë°°ì—´ ì •ë ¬ ì „: " + string.Join(", ", myArray));
 
-        // Á¤·Ä ½ÃÀÛ
         myList = SortList(myList);
         SortArray(myArray);
 
-        Debug.Log("Á¤·Ä ÈÄ: " + string.Join(", ", myList));
-        Debug.Log("Á¤·Ä ÈÄ: " + string.Join(", ", myArray));
+        Debug.Log("ë¦¬ìŠ¤íŠ¸ ì •ë ¬ í›„: " + string.Join(", ", myList));
+        Debug.Log("ë°°ì—´ ì •ë ¬ í›„: " + string.Join(", ", myArray));
     }
 
     List<int> SortList(List<int> list)
@@ -44,10 +43,8 @@ public class MergeSort : MonoBehaviour
         List<int> result = new List<int>();
         int i = 0, j = 0;
 
-        // ÁÂÃø, ¿ìÃø ÇÏ³ª¶óµµ Ä«¿îÆ®°¡ ³Ñ¾î°¡¸é ·çÇÁÁ¾·á
         while (i < left.Count && j < right.Count)
         {
-            //¿ÞÂÊ°ú ¿À¸¥ÂÊÀ» ºñ±³ÇØ¼­ ´õÀÛÀº°Í Ãß°¡ÇÏ°í ÇØ´ç ºÎºÐÀÇ ÀÎµ¦½º ++
             if (left[i] <= right[j])
             {
                 result.Add(left[i++]);
@@ -58,7 +55,6 @@ public class MergeSort : MonoBehaviour
             }
         }
 
-        // À§¿¡¼­ ÁÂÃøÀÌ³ª ¿ìÃøÁß ÇÏ³ª°¡ Á¾·áµÇ°í ³²Àº°Ô ÀÖ´Ù¸é ³²Àº°Í ½ÇÇà
         while (i < left.Count)
         {
             result.Add(left[i++]);
@@ -71,6 +67,7 @@ public class MergeSort : MonoBehaviour
         return result;
     }
 
+    //ì—¬ê¸°ì„œë¶€í„°ëŠ” ë°°ì—´
     void SortArray(int[] arr)
     {
         aux = new int[arr.Length];
@@ -92,29 +89,25 @@ public class MergeSort : MonoBehaviour
     void Merge(int[] arr, int left, int mid, int right)
     {
         Array.Copy(arr, left, aux, left, right - left + 1);
-        // 2. ÀÎµ¦½º Æ÷ÀÎÅÍ ¼³Á¤
-        int L = left;      // ¿ÞÂÊ ¹è¿­ ½ÃÀÛÁ¡
-        int R = mid + 1;   // ¿À¸¥ÂÊ ¹è¿­ ½ÃÀÛÁ¡
+        int L = left;      
+        int R = mid + 1;   
 
-        // 3. ½ÃÀÛÁ¡¿¡¼­ ³¡ÁöÁ¡±îÁö ·çÇÁ.
         for (int current = left; current <= right; current++)
         {
-            if (L > mid) // ½ÃÀÛÁ¡ÀÌ Áß°£À» ³ÑÀ¸¸é(¿ÞÂÊ ¼ÒÁø) ¿À¸¥ÂÊ ¹è¿­·Î Ã¤¿ì±â
+            if (L > mid) 
             {
                 arr[current] = aux[R++];
             }
-            else if (R > right) // Áß¾Ó+1ÀÌ ¿À¸¥ÂÊÀ» ³ÑÀ¸¸é(¿À¸¥ÂÊ ¼ÒÁø) ¿ÞÂÊ ¹è¿­·Î Ã¤¿ì±â
+            else if (R > right) 
             {
                 arr[current] = aux[L++];
             }
-            else if (aux[L] <= aux[R]) // ¿ÞÂÊ ¿ä¼Ò°¡ ´õ ÀÛ°Å³ª °°À¸¸é
-            {
-                //¹è¿­¿¡ L¸¦ ³Ö°í ++
+            else if (aux[L] <= aux[R]) 
+            {                
                 arr[current] = aux[L++];
             }
-            else // ¿À¸¥ÂÊ ¿ä¼Ò°¡ ´õ ÀÛÀ¸¸é
-            {
-                //¹è¿­¿¡ R¸¦ ³Ö°í ++
+            else 
+            {               
                 arr[current] = aux[R++];
             }
         }

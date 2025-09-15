@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "PlayerData", menuName = "Data/PlayerData")]
-public class PlayerDataSO : ScriptableObject
+public class PlayerDataSO : BaseDataSO
 {
     public string job;
     public int hp;

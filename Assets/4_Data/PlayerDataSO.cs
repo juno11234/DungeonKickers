@@ -10,4 +10,5 @@ public class PlayerDataSO : BaseDataSO
     public int moveSpeed;
     public float attackSpeed;
     public int mana;
+    public float attackRange;
 }

@@ -130,6 +130,7 @@ public class TSV_Converter_Improved
         success &= TrySetInt(cols, headerMap, "이동속도", ref playerData.moveSpeed);
         success &= TrySetFloat(cols, headerMap, "공격속도(초)", ref playerData.attackSpeed);
         success &= TrySetInt(cols, headerMap, "마나", ref playerData.mana);
+        success &= TrySetFloat(cols, headerMap, "사거리", ref playerData.attackRange);
         return success;
     }
 

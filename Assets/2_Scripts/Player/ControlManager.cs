@@ -1,73 +1,68 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ControlManager : MonoBehaviour
 {
-    public bool InputShift { get; set; }
-    public bool AttakcInput { get; set; }
-    private List<PlayerUnit> _players = new List<PlayerUnit>();
+    [SerializeField] private InputManager _inputManager;
+    [SerializeField] private PlayerSelection _playerSelection;
+    private bool _isShiftPressed;
+
     private Camera _mainCam;
 
     void Start()
     {
         _mainCam = Camera.main;
+        _inputManager.OnSelectAction += HandleSelectInput;
+        _inputManager.OnMoveOrAttackAction += HandleMoveOrAttackInput;
+        _inputManager.OnShiftStatusChanged += UpdateShiftStatus;
     }
 
-
-    public void ShootRayRight()
+    private void UpdateShiftStatus(bool isPressed)
     {
-        Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
-
-        if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform.gameObject.CompareTag("Ground"))
-        {
-            MoveControl(hit.point);
-
-            Debug.Log($"레이가 충돌한 오브젝트: {hit.collider.name}");
-        }
-        else if (hit.transform.gameObject.CompareTag("Enemy"))
-        {
-            AttackControl();
-        }
+        _isShiftPressed = isPressed;
     }
 
-    void MoveControl(Vector3 position)
+    private void HandleSelectInput(Vector2 mousePosition)
     {
-        foreach (PlayerUnit playerUnit in _players)
-        {
-            playerUnit.Move(position);
-        }
-    }
+        Ray ray = _mainCam.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
 
-    void AttackControl()
-    {
-        foreach (PlayerUnit playerUnit in _players)
+        if (Physics.Raycast(ray, out hit))
         {
-            playerUnit.Attack();
-        }
-    }
-
-    public void ShootRayLeft()
-    {
-        if (InputShift == false)
-        {
-            foreach (PlayerUnit players in _players)
+            if (hit.transform.TryGetComponent(out PlayerUnit playerUnit))
             {
-                players.CanceledSelected();
+                _playerSelection.SelectPlayer(playerUnit, _isShiftPressed);
             }
-
-            _players.Clear();
+            else
+            {
+                // Shift 키가 눌려있지 않으면 전체 선택 해제
+                if (_isShiftPressed==false)
+                {
+                    _playerSelection.DeselectAllPlayers();
+                }
+            }
         }
+    }
 
-        Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out RaycastHit hit) &&
-            hit.transform.TryGetComponent(out PlayerUnit playerUnit))
+    private void HandleMoveOrAttackInput(Vector2 mousePosition)
+    {
+        Ray ray = _mainCam.ScreenPointToRay(mousePosition);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
         {
-            _players.Add(playerUnit);
-            playerUnit.Selected();
-            Debug.Log($"리스트개수: {_players.Count}");
+            if (hit.transform.CompareTag("Enemy"))
+            {
+                var monster = CombatSystem.Instance.GetMonsterOrNull(hit.collider);
+                if (monster != null)
+                {
+                    _playerSelection.AttackSelectedPlayers(monster);
+                }
+            }
+            else if (hit.transform.CompareTag("Ground"))
+            {
+                _playerSelection.MoveSelectedPlayers(hit.point);
+            }
         }
-
-        Debug.Log($"레이가 충돌한 오브젝트: {hit.collider.name}");
     }
 }

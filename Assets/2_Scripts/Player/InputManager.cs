@@ -1,22 +1,37 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class InputManager : MonoBehaviour
 {
-    PlayerInput input;
-    PlayerInput.PlayerActionActions playerAction;
-    ControlManager control;
+    private PlayerInput input;
+    private PlayerInput.PlayerActionActions playerAction;
+
+    // 마우스 왼쪽 클릭(선택) 이벤트를 외부에 노출합니다.
+    public delegate void SelectActionHandler(Vector2 position);
+
+    public event SelectActionHandler OnSelectAction;
+
+// 마우스 오른쪽 클릭(명령) 이벤트를 외부에 노출합니다.
+    public delegate void MoveOrAttackActionHandler(Vector2 position);
+
+    public event MoveOrAttackActionHandler OnMoveOrAttackAction;
+
+// Shift 키 상태를 외부에 노출합니다.
+    public delegate void ShiftStatusChangedHandler(bool isShiftPressed);
+
+    public event ShiftStatusChangedHandler OnShiftStatusChanged;
 
     private void Awake()
     {
         input = new PlayerInput();
         playerAction = input.PlayerAction;
-        control = FindAnyObjectByType<ControlManager>();
 
-        playerAction.Move.performed += ctx => control.ShootRayRight();
-        playerAction.LeftButton.performed += ctx => control.ShootRayLeft();
-        playerAction.LeftShift.performed += ctx => control.InputShift = true;
-        playerAction.LeftShift.canceled += ctx => control.InputShift = false;
-        
+        // Input System의 콜백을 Unity Event로 변환하여 외부에 알립니다.
+        playerAction.LeftButton.performed += ctx => OnSelectAction.Invoke(Mouse.current.position.ReadValue());
+        playerAction.Move.performed += ctx => OnMoveOrAttackAction.Invoke(Mouse.current.position.ReadValue());
+        playerAction.LeftShift.performed += ctx => OnShiftStatusChanged.Invoke(true);
+        playerAction.LeftShift.canceled += ctx => OnShiftStatusChanged.Invoke(false);
     }
 
     private void OnEnable()

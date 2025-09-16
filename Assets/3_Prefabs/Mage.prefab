@@ -1849,7 +1849,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d5ed51efd55d50448b90542c2b7239a5, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -1871,7 +1871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
-  playerSO: {fileID: 11400000, guid: fcf7c14c2f1476a4ca1d36cc3732ee1a, type: 2}
+  playerSO: {fileID: 0}
   selectedMarker: {fileID: 2627403377857210514}
 --- !u!136 &3901889039677906327
 CapsuleCollider:

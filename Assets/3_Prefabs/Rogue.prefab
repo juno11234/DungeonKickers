@@ -30423,7 +30423,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 469535872815434913}
-  playerSO: {fileID: 11400000, guid: 7f118ddbc5516a84899c2496a00899a6, type: 2}
+  playerSO: {fileID: 0}
   selectedMarker: {fileID: 4344311704238491878}
 --- !u!195 &469535872815434913
 NavMeshAgent:

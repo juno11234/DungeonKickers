@@ -2202,7 +2202,7 @@ Animator:
   m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -2224,7 +2224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
-  playerSO: {fileID: 11400000, guid: e37210cc3a9368f43bf92ae781cd6a4c, type: 2}
+  playerSO: {fileID: 0}
   selectedMarker: {fileID: 4218624153168660434}
 --- !u!195 &8333581855516876622
 NavMeshAgent:

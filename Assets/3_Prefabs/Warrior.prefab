@@ -2199,7 +2199,7 @@ Animator:
   m_GameObject: {fileID: 6947457414187105680}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b69174d668ba02d44b14a084b217670a, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 68b2750cc3298b74b9c5ae755400b284, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2223,8 +2223,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea915ec12f50e564481af08c60030dda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  playerSO: {fileID: 0}
+  playerSO: {fileID: 11400000, guid: e37210cc3a9368f43bf92ae781cd6a4c, type: 2}
   selectedMarker: {fileID: 4218624153168660434}
 --- !u!195 &8333581855516876622
 NavMeshAgent:

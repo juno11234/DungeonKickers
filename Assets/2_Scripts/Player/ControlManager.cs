@@ -61,7 +61,7 @@ public class ControlManager : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Ground"))
             {
-                _playerSelection.MoveSelectedPlayers(hit.point);
+                _playerSelection.MoveSelectedPlayers(hit.point);                
             }
         }
     }

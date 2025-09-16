@@ -20,4 +20,4 @@ MonoBehaviour:
   moveSpeed: 7
   attackSpeed: 1
   mana: 0
-  attackRange: 3
+  attackRange: 8

@@ -34,6 +34,7 @@ public class PlayerSelection : MonoBehaviour
     {
         foreach (PlayerUnit player in _selectedPlayers)
         {
+            player.MonsterTargetCancel();
             player.Move(position);
         }
     }

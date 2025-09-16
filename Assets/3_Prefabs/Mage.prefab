@@ -1846,7 +1846,7 @@ Animator:
   m_GameObject: {fileID: 6791911665291671615}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 9d545e43681431348908eab98e78aa45, type: 3}
-  m_Controller: {fileID: 9100000, guid: d5ed51efd55d50448b90542c2b7239a5, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0c47635e1dc6e17418224939a8c1c881, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1870,8 +1870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 495789ca403f270449d9958950a4cb85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  playerSO: {fileID: 0}
+  playerSO: {fileID: 11400000, guid: fcf7c14c2f1476a4ca1d36cc3732ee1a, type: 2}
   selectedMarker: {fileID: 2627403377857210514}
 --- !u!136 &3901889039677906327
 CapsuleCollider:

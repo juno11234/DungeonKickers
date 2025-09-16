@@ -3,16 +3,30 @@ using UnityEngine;
 
 public class ControlManager : MonoBehaviour
 {
-    [SerializeField] private PlayerUnit[] allPlayer;
-    private LinkedList<PlayerUnit> _players = new LinkedList<PlayerUnit>();
+    public bool InputShift { get; set; }
+    public bool AttakcInput { get; set; }
+    private List<PlayerUnit> _players = new List<PlayerUnit>();
     private Camera _mainCam;
 
     void Start()
     {
         _mainCam = Camera.main;
-        foreach (PlayerUnit player in allPlayer)
+    }
+
+
+    public void ShootRayRight()
+    {
+        Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
+
+        if (Physics.Raycast(ray, out RaycastHit hit) && hit.transform.gameObject.CompareTag("Ground"))
         {
-            _players.AddLast(player);
+            MoveControl(hit.point);
+
+            Debug.Log($"레이가 충돌한 오브젝트: {hit.collider.name}");
+        }
+        else if (hit.transform.gameObject.CompareTag("Enemy"))
+        {
+            AttackControl();
         }
     }
 
@@ -24,18 +38,36 @@ public class ControlManager : MonoBehaviour
         }
     }
 
-    public void ShootRay()
+    void AttackControl()
     {
+        foreach (PlayerUnit playerUnit in _players)
+        {
+            playerUnit.Attack();
+        }
+    }
+
+    public void ShootRayLeft()
+    {
+        if (InputShift == false)
+        {
+            foreach (PlayerUnit players in _players)
+            {
+                players.CanceledSelected();
+            }
+
+            _players.Clear();
+        }
+
         Ray ray = _mainCam.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+
+        if (Physics.Raycast(ray, out RaycastHit hit) &&
+            hit.transform.TryGetComponent(out PlayerUnit playerUnit))
         {
-            MoveControl(hit.point);
-            //. 충돌한 오브젝트 정보 출력
-            Debug.Log($"레이가 충돌한 오브젝트: {hit.collider.name}");
+            _players.Add(playerUnit);
+            playerUnit.Selected();
+            Debug.Log($"리스트개수: {_players.Count}");
         }
-        else
-        {
-            Debug.Log("레이가 아무것도 충돌하지 않았습니다.");
-        }
+
+        Debug.Log($"레이가 충돌한 오브젝트: {hit.collider.name}");
     }
 }

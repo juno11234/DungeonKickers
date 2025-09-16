@@ -25,9 +25,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "AttackClick",
+                    "name": "LeftButton",
                     "type": "Button",
                     "id": "b717b69f-3a91-4a08-8d3a-bca5ee91b617",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "LeftShift",
+                    "type": "Button",
+                    "id": "d4652d92-e2de-486a-ab79-d238e464aa61",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -64,7 +73,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "AttackClick",
+                    "action": "LeftButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a8a6d7d7-862b-4c64-bd09-1d0495cc30cb",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftShift",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

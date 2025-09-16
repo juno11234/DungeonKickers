@@ -111,9 +111,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""AttackClick"",
+                    ""name"": ""LeftButton"",
                     ""type"": ""Button"",
                     ""id"": ""b717b69f-3a91-4a08-8d3a-bca5ee91b617"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftShift"",
+                    ""type"": ""Button"",
+                    ""id"": ""d4652d92-e2de-486a-ab79-d238e464aa61"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -150,7 +159,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""AttackClick"",
+                    ""action"": ""LeftButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a8a6d7d7-862b-4c64-bd09-1d0495cc30cb"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftShift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -163,7 +183,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_PlayerAction = asset.FindActionMap("PlayerAction", throwIfNotFound: true);
         m_PlayerAction_Move = m_PlayerAction.FindAction("Move", throwIfNotFound: true);
         m_PlayerAction_Attack = m_PlayerAction.FindAction("Attack", throwIfNotFound: true);
-        m_PlayerAction_AttackClick = m_PlayerAction.FindAction("AttackClick", throwIfNotFound: true);
+        m_PlayerAction_LeftButton = m_PlayerAction.FindAction("LeftButton", throwIfNotFound: true);
+        m_PlayerAction_LeftShift = m_PlayerAction.FindAction("LeftShift", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -246,7 +267,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private List<IPlayerActionActions> m_PlayerActionActionsCallbackInterfaces = new List<IPlayerActionActions>();
     private readonly InputAction m_PlayerAction_Move;
     private readonly InputAction m_PlayerAction_Attack;
-    private readonly InputAction m_PlayerAction_AttackClick;
+    private readonly InputAction m_PlayerAction_LeftButton;
+    private readonly InputAction m_PlayerAction_LeftShift;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerAction".
     /// </summary>
@@ -267,9 +289,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Attack => m_Wrapper.m_PlayerAction_Attack;
         /// <summary>
-        /// Provides access to the underlying input action "PlayerAction/AttackClick".
+        /// Provides access to the underlying input action "PlayerAction/LeftButton".
         /// </summary>
-        public InputAction @AttackClick => m_Wrapper.m_PlayerAction_AttackClick;
+        public InputAction @LeftButton => m_Wrapper.m_PlayerAction_LeftButton;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerAction/LeftShift".
+        /// </summary>
+        public InputAction @LeftShift => m_Wrapper.m_PlayerAction_LeftShift;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -302,9 +328,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Attack.started += instance.OnAttack;
             @Attack.performed += instance.OnAttack;
             @Attack.canceled += instance.OnAttack;
-            @AttackClick.started += instance.OnAttackClick;
-            @AttackClick.performed += instance.OnAttackClick;
-            @AttackClick.canceled += instance.OnAttackClick;
+            @LeftButton.started += instance.OnLeftButton;
+            @LeftButton.performed += instance.OnLeftButton;
+            @LeftButton.canceled += instance.OnLeftButton;
+            @LeftShift.started += instance.OnLeftShift;
+            @LeftShift.performed += instance.OnLeftShift;
+            @LeftShift.canceled += instance.OnLeftShift;
         }
 
         /// <summary>
@@ -322,9 +351,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Attack.started -= instance.OnAttack;
             @Attack.performed -= instance.OnAttack;
             @Attack.canceled -= instance.OnAttack;
-            @AttackClick.started -= instance.OnAttackClick;
-            @AttackClick.performed -= instance.OnAttackClick;
-            @AttackClick.canceled -= instance.OnAttackClick;
+            @LeftButton.started -= instance.OnLeftButton;
+            @LeftButton.performed -= instance.OnLeftButton;
+            @LeftButton.canceled -= instance.OnLeftButton;
+            @LeftShift.started -= instance.OnLeftShift;
+            @LeftShift.performed -= instance.OnLeftShift;
+            @LeftShift.canceled -= instance.OnLeftShift;
         }
 
         /// <summary>
@@ -380,11 +412,18 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAttack(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "AttackClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "LeftButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAttackClick(InputAction.CallbackContext context);
+        void OnLeftButton(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LeftShift" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftShift(InputAction.CallbackContext context);
     }
 }

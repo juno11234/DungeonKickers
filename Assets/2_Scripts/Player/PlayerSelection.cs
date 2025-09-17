@@ -43,7 +43,7 @@ public class PlayerSelection : MonoBehaviour
     {
         foreach (PlayerUnit player in _selectedPlayers)
         {
-            player.Attack(monster);
+            player.AttackTargetSet(monster);
         }
     }
 }

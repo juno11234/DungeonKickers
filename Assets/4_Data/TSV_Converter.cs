@@ -10,10 +10,13 @@ public class TSV_Converter_Improved
     //불러올 tsv경로
     private static readonly string playerDataTsvPath = "Assets/4_Data/PlayerData/PlayerData_TSV.tsv";
     private static readonly string itemDataTsvPath = "Assets/4_Data/ItemData/ItemData_TSV.tsv";
+    private static readonly string activeDataTsvPath = "Assets/4_Data/ActiveSkill/ActiveSkillData_TSV.tsv";
 
     //저장할 경로
     private static readonly string playerDataOutDir = "Assets/4_Data/PlayerData";
     private static readonly string itemDataOutDir = "Assets/4_Data/ItemData";
+    private static readonly string activeDataOutDir = "Assets/4_Data/ActiveSkill";
+
 
     [MenuItem("Tools/TSV Converter/Convert Player Data")]
     public static void ConvertPlayerData()
@@ -25,6 +28,11 @@ public class TSV_Converter_Improved
     public static void ConvertItemData()
     {
         ConvertData<ItemDataSO>(itemDataTsvPath, itemDataOutDir);
+    }
+    [MenuItem("Tools/TSV Converter/Convert Active Data")]
+    public static void ConvertActiveData()
+    {
+        ConvertData<ActiveSkillSO>(activeDataTsvPath, activeDataOutDir);
     }
 
     private static void ConvertData<T>(string tsvPath, string outDir) where T : BaseDataSO
@@ -113,6 +121,15 @@ public class TSV_Converter_Improved
                 return true;
             }
         }
+        else if (so is ActiveSkillSO activeData)
+        {
+            if (ActiveSOMapping(cols, headerMap, activeData))
+            {
+                assetName = $"Active_{activeData.className}_{activeData.skillName}";
+                return true;
+            }
+
+        }
 
         Debug.LogError($"알 수 없는 데이터 타입입니다.");
         return false;
@@ -142,6 +159,17 @@ public class TSV_Converter_Improved
         success &= TrySetString(cols, headerMap, "아이템이름", ref itemData.itemName);
         success &= TrySetInt(cols, headerMap, "아이템밸류", ref itemData.itemValue);
         success &= TrySetInt(cols, headerMap, "가격", ref itemData.price);
+        return success;
+    }
+    private static bool ActiveSOMapping(string[] cols, Dictionary<string, int> headerMap, ActiveSkillSO activeData)
+    {
+        bool success = true;
+        success &= TrySetInt(cols, headerMap, "ID", ref activeData.id);
+        success &= TrySetString(cols, headerMap, "직업", ref activeData.className);
+        success &= TrySetString(cols, headerMap, "스킬이름", ref activeData.skillName);
+        success &= TrySetInt(cols, headerMap, "밸류", ref activeData.value);
+        success &= TrySetFloat(cols, headerMap, "쿨타임", ref activeData.coolTime);
+        success &= TrySetInt(cols, headerMap, "마나소모", ref activeData.manaConsum);
         return success;
     }
 

@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 738588849793942642}
   - component: {fileID: 5697364871239705669}
   - component: {fileID: 8184592711224256144}
+  - component: {fileID: 5004630555891143102}
   m_Layer: 0
   m_Name: Skeleton
   m_TagString: Enemy
@@ -299,10 +300,10 @@ Animator:
   m_GameObject: {fileID: 883155586393056605}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: b69174d668ba02d44b14a084b217670a, type: 3}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 20c6dc9cd40c40a4fb908656572a834c, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -346,6 +347,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee70b277cf353bf4686838b12d8a0884, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monsterSO: {fileID: 11400000, guid: b386eeb1e9616b04f8984d476bccc237, type: 2}
+--- !u!195 &5004630555891143102
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883155586393056605}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 2000
+  avoidancePriority: 50
+  m_AngularSpeed: 2000
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &1221039412079245390
 GameObject:
   m_ObjectHideFlags: 0

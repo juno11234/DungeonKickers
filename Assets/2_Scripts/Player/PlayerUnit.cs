@@ -5,6 +5,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
 {
 
     [SerializeField] protected PlayerDataSO playerSO;
+    [SerializeField] protected ActiveSkillSO activeSO;
     [SerializeField] private GameObject selectedMarker;
     private Collider _myCollider;
     private Animator _myAnimator;
@@ -16,11 +17,10 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     private int _hp;
     private float attackRange;
     private float attackSpeed;
-    private float attackTimer;
     private IFighter _targetMonster;
     private float originalAttackAnimLength; // 애니메이션의 원래 길이
-    private bool isInitialized = false;
-    float attackAniSpeed;
+    private float attackAniSpeed;
+    protected int guard = 1;
 
     private void Start()
     {
@@ -34,7 +34,6 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         _hp = playerSO.hp;
         attackRange = playerSO.attackRange;
         attackSpeed = playerSO.attackSpeed;
-        attackTimer = playerSO.attackSpeed;
 
         originalAttackAnimLength = GetAnimationLength("Attack");
         float desiredDuration = 1f / attackSpeed;
@@ -53,10 +52,10 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         {
             _myAnimator.SetFloat("Speed", 0f);
         }
-        attackTimer += Time.deltaTime;
 
         AttackOrChase();
     }
+    public abstract void Skill();
     private float GetAnimationLength(string stateName)
     {
         // AnimatorController가 있는지 확인
@@ -92,21 +91,6 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
                 // 이동을 멈춥니다.
                 agent.ResetPath();
                 _myAnimator.SetFloat("attackSpeed", attackAniSpeed);
-                if (attackTimer >= 1f / attackSpeed)
-                {
-                    Debug.Log(gameObject.name + "Attack");
-                    attackTimer = 0;
-                    // CombatSystem에 공격 이벤트 추가
-                    CombatEvent combatEvents = new()
-                    {
-                        Sender = this,
-                        Receiver = _targetMonster,
-                        Damage = playerSO.attackDamage,
-                        Collider = _targetMonster.MainCollider
-                    };
-                    CombatSystem.Instance.AddInGameEvent(combatEvents);
-                }
-
             }
             else
             {
@@ -115,8 +99,22 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
 
         }
     }
+    //힐러는 아군 힐로 수정
+    public virtual void AttackEvent()
+    {
+        Debug.Log(gameObject.name + "Attack");
+        // CombatSystem에 공격 이벤트 추가
+        CombatEvent combatEvents = new()
+        {
+            Sender = this,
+            Receiver = _targetMonster,
+            Damage = playerSO.attackDamage,
+            Collider = _targetMonster.MainCollider
+        };
+        CombatSystem.Instance.AddInGameEvent(combatEvents);
+    }
 
-    public void Attack(IFighter target)
+    public void AttackTargetSet(IFighter target)
     {
         // 새로운 공격 명령이 들어오면 기존 대상을 갱신합니다.
         _targetMonster = target;
@@ -148,12 +146,14 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
             _targetMonster = null;
         }
     }
+
     public void TakeDamage(CombatEvent combatEvent)
     {
-        _hp -= combatEvent.Damage;
+        _hp -= combatEvent.Damage / guard;
         if (_hp <= 0)
         {
             //죽음
         }
     }
+
 }

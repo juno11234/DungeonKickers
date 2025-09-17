@@ -12,12 +12,12 @@ public class InputManager : MonoBehaviour
 
     public event SelectActionHandler OnSelectAction;
 
-// 마우스 오른쪽 클릭(명령) 이벤트를 외부에 노출합니다.
+    // 마우스 오른쪽 클릭(명령) 이벤트를 외부에 노출합니다.
     public delegate void MoveOrAttackActionHandler(Vector2 position);
 
     public event MoveOrAttackActionHandler OnMoveOrAttackAction;
 
-// Shift 키 상태를 외부에 노출합니다.
+    // Shift 키 상태를 외부에 노출합니다.
     public delegate void ShiftStatusChangedHandler(bool isShiftPressed);
 
     public event ShiftStatusChangedHandler OnShiftStatusChanged;

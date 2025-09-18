@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8148227443062355607}
   - component: {fileID: 5405756596444260191}
   - component: {fileID: 8529790256076444068}
+  - component: {fileID: 4754662719407950471}
   m_Layer: 0
   m_Name: PlayerControl
   m_TagString: Untagged
@@ -48,6 +49,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _inputManager: {fileID: 5405756596444260191}
   _playerSelection: {fileID: 8529790256076444068}
+  cameraControl: {fileID: 4754662719407950471}
+  selectionBox: {fileID: 0}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &5405756596444260191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,15 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f34b3af600e13e94d947611cee33bd51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnSelectAction:
-    m_PersistentCalls:
-      m_Calls: []
-  OnMoveOrAttackAction:
-    m_PersistentCalls:
-      m_Calls: []
-  OnShiftStatusChanged:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &8529790256076444068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81,3 +78,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46909a8cebd7dac48aaf40614bd0ce35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4754662719407950471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9011381033560474239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f261aec8652f5ed4e9eff00f67d8e7fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panSpeed: 20
+  edgeThreshold: 20
+  zoomSpeed: 1
+  minZoom: 5
+  maxZoom: 10

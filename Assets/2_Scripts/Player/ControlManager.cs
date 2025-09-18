@@ -1,12 +1,16 @@
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class ControlManager : MonoBehaviour
 {
+
     [SerializeField] private InputManager _inputManager;
     [SerializeField] private PlayerSelection _playerSelection;
-    [SerializeField] private RectTransform selectionBox;
+    [SerializeField] private CameraMovement cameraControl;
 
+    [SerializeField] private RectTransform selectionBox;
+    [SerializeField] private LayerMask groundLayer;
 
     private Camera _mainCam;
     private bool _isShiftPressed;
@@ -22,6 +26,7 @@ public class ControlManager : MonoBehaviour
 
         _inputManager.OnSelectReleased += HandleSelectReleased;
 
+        _inputManager.OnScrollInput += cameraControl.Zoom;
         selectionBox.gameObject.SetActive(false);
     }
 
@@ -33,7 +38,7 @@ public class ControlManager : MonoBehaviour
             UpdateSelectionBox(startMousePos, currentMousePos);
         }
     }
-
+    //쉬프트 누름
     private void UpdateShiftStatus(bool isPressed)
     {
         _isShiftPressed = isPressed;
@@ -91,23 +96,38 @@ public class ControlManager : MonoBehaviour
     }
 
     //UI에 맞춰 오버랩박스 생성
+
     private void SelectUnitsInDragBox(Vector2 startPos, Vector2 endPos)
     {
-        Vector3 min = _mainCam.ScreenToWorldPoint(new Vector3(Mathf.Min(startPos.x, endPos.x), Mathf.Min(startPos.y, endPos.y), _mainCam.nearClipPlane));
-        Vector3 max = _mainCam.ScreenToWorldPoint(new Vector3(Mathf.Max(startPos.x, endPos.x), Mathf.Max(startPos.y, endPos.y), _mainCam.nearClipPlane));
+        Ray startRay = _mainCam.ScreenPointToRay(startPos);
+        Ray endRay = _mainCam.ScreenPointToRay(endPos);
 
-        // OverlapBox의 중앙점과 크기 계산
-        Vector3 center = (min + max) / 2f;
-        Vector3 size = max - min;
-        size.z = 100f; // z축으로 충분한 깊이를 줌
-
-        Collider[] hitColliders = Physics.OverlapBox(center, size / 2, Quaternion.identity);
-
-        foreach (var hitCollider in hitColliders)
+        if (Physics.Raycast(startRay, out RaycastHit startHit, Mathf.Infinity, groundLayer) &&
+            Physics.Raycast(endRay, out RaycastHit endHit, Mathf.Infinity, groundLayer))
         {
-            if (hitCollider.TryGetComponent(out PlayerUnit playerUnit))
+            Vector3 dragMinWorld = startHit.point;
+            Vector3 dragMaxWorld = endHit.point;
+
+            float boxY = (dragMinWorld.y + dragMaxWorld.y) / 2f;
+            dragMinWorld.y = boxY;
+            dragMaxWorld.y = boxY;
+
+            Vector3 center = (dragMinWorld + dragMaxWorld) / 2f;
+            Vector3 size = dragMaxWorld - dragMinWorld;
+
+            // 크기가 항상 양수가 되도록 Mathf.Abs() 사용
+            size.x = Mathf.Abs(size.x);
+            size.y = 10f;
+            size.z = Mathf.Abs(size.z);
+
+            Collider[] hitColliders = Physics.OverlapBox(center, size / 2, Quaternion.identity);
+
+            foreach (var hitCollider in hitColliders)
             {
-                _playerSelection.SelectPlayer(playerUnit, true); // 드래그 선택은 항상 Shift키 누른 것처럼 작동
+                if (hitCollider.TryGetComponent(out PlayerUnit playerUnit))
+                {
+                    _playerSelection.SelectPlayer(playerUnit, true);
+                }
             }
         }
     }
@@ -119,8 +139,9 @@ public class ControlManager : MonoBehaviour
 
         Vector2 min = Vector2.Min(startPos, currentPos);
         Vector2 max = Vector2.Max(startPos, currentPos);
-
+        //앵커 피벗을 설정
         selectionBox.anchoredPosition = min;
+        //사이즈를 설정
         selectionBox.sizeDelta = max - min;
     }
 

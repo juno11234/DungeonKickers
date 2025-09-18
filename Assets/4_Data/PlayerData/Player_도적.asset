@@ -17,7 +17,7 @@ MonoBehaviour:
   hp: 150
   attackDamage: 6
   defence: 1
-  moveSpeed: 6
+  moveSpeed: 5
   attackSpeed: 1
   mana: -1
   attackRange: 8

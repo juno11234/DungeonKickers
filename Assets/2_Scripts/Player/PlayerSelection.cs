@@ -18,7 +18,7 @@ public class PlayerSelection : MonoBehaviour
             playerUnit.Selected();
         }
 
-        Debug.Log($"선택된 유닛 수: {_selectedPlayers.Count}");
+       // Debug.Log($"선택된 유닛 수: {_selectedPlayers.Count}");
     }
 
     public void DeselectAllPlayers()

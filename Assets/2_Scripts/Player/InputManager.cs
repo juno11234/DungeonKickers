@@ -7,20 +7,23 @@ public class InputManager : MonoBehaviour
     private PlayerInput input;
     private PlayerInput.PlayerActionActions playerAction;
 
-    // 마우스 왼쪽 클릭(선택) 이벤트를 외부에 노출합니다.
+    // 마우스 왼쪽 클릭(선택) 이벤트
     public delegate void SelectActionHandler(Vector2 position);
 
     public event SelectActionHandler OnSelectAction;
     public event SelectActionHandler OnSelectReleased;
-    // 마우스 오른쪽 클릭(명령) 이벤트를 외부에 노출합니다.
-    public delegate void MoveOrAttackActionHandler(Vector2 position);
 
-    public event MoveOrAttackActionHandler OnMoveOrAttackAction;
+    // 마우스 오른쪽 클릭(명령) 이벤트
+    public event SelectActionHandler OnMoveOrAttackAction;
 
     // Shift 키 상태를 외부에 노출합니다.
     public delegate void ShiftStatusChangedHandler(bool isShiftPressed);
 
     public event ShiftStatusChangedHandler OnShiftStatusChanged;
+
+    public delegate void ScrollHandler(float scrollValue);
+
+    public event ScrollHandler OnScrollInput;
 
     private void Awake()
     {
@@ -35,6 +38,8 @@ public class InputManager : MonoBehaviour
 
         playerAction.LeftShift.performed += ctx => OnShiftStatusChanged.Invoke(true);
         playerAction.LeftShift.canceled += ctx => OnShiftStatusChanged.Invoke(false);
+
+        playerAction.Zoom.performed += ctx => OnScrollInput(ctx.ReadValue<float>());
     }
 
     private void OnEnable()

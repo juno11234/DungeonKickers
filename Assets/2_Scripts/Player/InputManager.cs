@@ -11,7 +11,7 @@ public class InputManager : MonoBehaviour
     public delegate void SelectActionHandler(Vector2 position);
 
     public event SelectActionHandler OnSelectAction;
-
+    public event SelectActionHandler OnSelectReleased;
     // 마우스 오른쪽 클릭(명령) 이벤트를 외부에 노출합니다.
     public delegate void MoveOrAttackActionHandler(Vector2 position);
 
@@ -29,7 +29,10 @@ public class InputManager : MonoBehaviour
 
         // Input System의 콜백을 Unity Event로 변환하여 외부에 알립니다.
         playerAction.LeftButton.performed += ctx => OnSelectAction.Invoke(Mouse.current.position.ReadValue());
+        playerAction.LeftButton.canceled += ctx => OnSelectReleased.Invoke(Mouse.current.position.ReadValue());
+
         playerAction.Move.performed += ctx => OnMoveOrAttackAction.Invoke(Mouse.current.position.ReadValue());
+
         playerAction.LeftShift.performed += ctx => OnShiftStatusChanged.Invoke(true);
         playerAction.LeftShift.canceled += ctx => OnShiftStatusChanged.Invoke(false);
     }

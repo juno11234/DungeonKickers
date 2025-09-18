@@ -15,6 +15,6 @@ MonoBehaviour:
   id: 2001
   className: "\uC804\uC0AC"
   skillName: "\uACAC\uB514\uAE30"
-  value: 2
+  value: 10
   coolTime: 120
   manaConsum: 0

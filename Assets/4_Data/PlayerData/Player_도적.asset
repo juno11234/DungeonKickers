@@ -15,9 +15,9 @@ MonoBehaviour:
   id: 1002
   job: "\uB3C4\uC801"
   hp: 150
-  attackDamage: 8
-  defence: 4
-  moveSpeed: 7
+  attackDamage: 6
+  defence: 1
+  moveSpeed: 6
   attackSpeed: 1
   mana: -1
   attackRange: 8

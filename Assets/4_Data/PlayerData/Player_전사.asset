@@ -16,7 +16,7 @@ MonoBehaviour:
   job: "\uC804\uC0AC"
   hp: 300
   attackDamage: 4
-  defence: 8
+  defence: 3
   moveSpeed: 5
   attackSpeed: 0.8
   mana: -1

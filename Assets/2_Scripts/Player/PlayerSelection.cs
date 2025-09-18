@@ -70,4 +70,26 @@ public class PlayerSelection : MonoBehaviour
             player.AttackTargetSet(monster);
         }
     }
+
+    public void MoveAndAttack(Vector3 position)
+    {
+        // 선택된 유닛이 1명일 때는 분산하지 않고 바로 이동
+        if (_selectedPlayers.Count == 1)
+        {
+            _selectedPlayers[0].MonsterTargetCancel();
+            _selectedPlayers[0].Move(position);
+            return;
+        }
+
+        // 여러 유닛이 선택되었을 경우 목표 지점 분산
+        for (int i = 0; i < _selectedPlayers.Count; i++)
+        {
+            // 목표 지점을 중심으로 원형으로 퍼질 위치 계산
+            Vector3 offset = GetDistributedPosition(i, _selectedPlayers.Count, spreadRadius);
+            Vector3 destination = position + offset;
+
+            _selectedPlayers[i].MonsterTargetCancel();
+            _selectedPlayers[i].Move(destination);
+        }
+    }
 }

@@ -24,7 +24,7 @@ public class ControlManager : MonoBehaviour
         _inputManager.OnSelectAction += HandleSelectInput;
         _inputManager.OnMoveOrAttackAction += HandleMoveOrAttackInput;
         _inputManager.OnShiftStatusChanged += UpdateShiftStatus;
-
+        _inputManager.OnAKeyChanged += UpdateAKeyStatus;
         _inputManager.OnSelectReleased += HandleSelectReleased;
 
         _inputManager.OnScrollInput += cameraControl.Zoom;
@@ -56,8 +56,7 @@ public class ControlManager : MonoBehaviour
     {
         if (_isAKeyPressed)
         {
-            _isAKeyPressed = false;
-            AttackGround();
+            AttackGround(mousePos);
             return;
         }
 
@@ -70,14 +69,37 @@ public class ControlManager : MonoBehaviour
             _playerSelection.DeselectAllPlayers();
         }
     }
-    private void AttackGround()
+    private void AttackGround(Vector2 mousePos)
     {
+        Ray ray = _mainCam.ScreenPointToRay(mousePos);
+        RaycastHit hit;
 
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.transform.CompareTag("Enemy"))
+            {
+                var monster = CombatSystem.Instance.GetMonsterOrNull(hit.collider);
+                if (monster != null)
+                {
+                    _playerSelection.AttackSelectedPlayers(monster);
+                }
+            }
+            else if (hit.transform.CompareTag("Ground"))
+            {
+                _playerSelection.MoveSelectedPlayers(hit.point);
+            }
+        }
     }
 
     //마우스를 뗄때 유닛 선택방식결정
     private void HandleSelectReleased(Vector2 endMousePos)
     {
+        if (_isAKeyPressed)
+        {
+            _isAKeyPressed = false;
+            return;
+        }
+
         isDragging = false;
         selectionBox.gameObject.SetActive(false);
 

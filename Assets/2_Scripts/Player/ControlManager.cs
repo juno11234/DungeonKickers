@@ -14,6 +14,7 @@ public class ControlManager : MonoBehaviour
 
     private Camera _mainCam;
     private bool _isShiftPressed;
+    private bool _isAKeyPressed;
     private bool isDragging = false;
     private Vector2 startMousePos;
 
@@ -45,9 +46,21 @@ public class ControlManager : MonoBehaviour
         _isShiftPressed = isPressed;
     }
 
-    //마우스를 누를때
+    private void UpdateAKeyStatus(bool isPressed)
+    {
+        _isAKeyPressed = isPressed;
+    }
+
+    //마우스를 좌클릭 누를때
     private void HandleSelectInput(Vector2 mousePos)
     {
+        if (_isAKeyPressed)
+        {
+            _isAKeyPressed = false;
+            AttackGround();
+            return;
+        }
+
         isDragging = true;
         startMousePos = mousePos;
 
@@ -56,6 +69,10 @@ public class ControlManager : MonoBehaviour
         {
             _playerSelection.DeselectAllPlayers();
         }
+    }
+    private void AttackGround()
+    {
+
     }
 
     //마우스를 뗄때 유닛 선택방식결정
@@ -149,6 +166,10 @@ public class ControlManager : MonoBehaviour
     //우클릭 로직
     private void HandleMoveOrAttackInput(Vector2 mousePos)
     {
+        if (_isAKeyPressed)
+        {
+            _isAKeyPressed = false;
+        }
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         RaycastHit hit;
 

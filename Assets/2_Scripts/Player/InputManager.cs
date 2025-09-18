@@ -17,9 +17,10 @@ public class InputManager : MonoBehaviour
     public event SelectActionHandler OnMoveOrAttackAction;
 
     // Shift 키 상태를 외부에 노출합니다.
-    public delegate void ShiftStatusChangedHandler(bool isShiftPressed);
+    public delegate void ButtonPushHandler(bool isPressed);
 
-    public event ShiftStatusChangedHandler OnShiftStatusChanged;
+    public event ButtonPushHandler OnShiftStatusChanged;
+    public event ButtonPushHandler OnAKeyChanged;
 
     //마우스 스크롤
     public delegate void ScrollHandler(float scrollValue);
@@ -41,6 +42,8 @@ public class InputManager : MonoBehaviour
         playerAction.LeftShift.canceled += ctx => OnShiftStatusChanged.Invoke(false);
 
         playerAction.Zoom.performed += ctx => OnScrollInput(ctx.ReadValue<float>());
+
+        playerAction.Attack.performed += ctx => OnAKeyChanged(true);
     }
 
     private void OnEnable()

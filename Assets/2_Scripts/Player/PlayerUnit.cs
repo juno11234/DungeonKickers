@@ -7,6 +7,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     [SerializeField] protected PlayerDataSO playerSO;
     [SerializeField] protected ActiveSkillSO activeSO;
     [SerializeField] private GameObject selectedMarker;
+
     private Collider _myCollider;
     private Animator _myAnimator;
     private NavMeshAgent agent;
@@ -116,10 +117,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
 
     public void AttackTargetSet(IFighter target)
     {
-        // 새로운 공격 명령이 들어오면 기존 대상을 갱신합니다.
         _targetMonster = target;
-        // 대상의 위치로 이동을 시작합니다.
-        // Update 메서드에서 거리를 체크하며 공격을 처리합니다.       
     }
 
     public void Selected()

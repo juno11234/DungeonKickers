@@ -27,6 +27,7 @@ public class ControlManager : MonoBehaviour
         _inputManager.OnSelectReleased += HandleSelectReleased;
 
         _inputManager.OnScrollInput += cameraControl.Zoom;
+
         selectionBox.gameObject.SetActive(false);
     }
 

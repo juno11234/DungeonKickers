@@ -21,6 +21,7 @@ public class InputManager : MonoBehaviour
 
     public event ShiftStatusChangedHandler OnShiftStatusChanged;
 
+    //마우스 스크롤
     public delegate void ScrollHandler(float scrollValue);
 
     public event ScrollHandler OnScrollInput;

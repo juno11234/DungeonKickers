@@ -13,8 +13,8 @@ public class CameraMovement : MonoBehaviour
     public float maxZoom = 10f;
 
     private Camera mainCam;
-    private Vector2 mousePosition;
 
+    private Vector2 mousePosition;
 
     private void Start()
     {
@@ -22,34 +22,36 @@ public class CameraMovement : MonoBehaviour
     }
     private void Update()
     {
-    //    HandleEdgePan();
+        // 매 프레임마다 마우스의 현재 위치를 가져옵니다.
+        mousePosition = Mouse.current.position.ReadValue();
+        HandleEdgePan();
     }
 
-    private void HandleEdgePan()
+    public void HandleEdgePan()
     {
         Vector3 moveDirection = Vector3.zero;
 
         // 화면 가장자리 이동 감지
         if (mousePosition.x < edgeThreshold)
         {
-            moveDirection.x = -1;
+            moveDirection.x = 1;
         }
         else if (mousePosition.x > Screen.width - edgeThreshold)
         {
-            moveDirection.x = 1;
+            moveDirection.x = -1;
         }
 
         if (mousePosition.y < edgeThreshold)
         {
-            moveDirection.z = -1;
+            moveDirection.z = 1;
         }
         else if (mousePosition.y > Screen.height - edgeThreshold)
         {
-            moveDirection.z = 1;
+            moveDirection.z = -1;
         }
 
         // 이동 방향으로 카메라 이동
-        transform.Translate(moveDirection * panSpeed * Time.deltaTime, Space.World);
+        mainCam.transform.Translate(moveDirection * panSpeed * Time.deltaTime, Space.World);
     }
 
     public void Zoom(float scrollDelta)

@@ -11,6 +11,7 @@ public class ControlManager : MonoBehaviour
 
     [SerializeField] private RectTransform selectionBox;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask detectorLayer;
 
     private Camera _mainCam;
     private bool _isShiftPressed;
@@ -29,7 +30,7 @@ public class ControlManager : MonoBehaviour
 
         _inputManager.OnScrollInput += cameraControl.Zoom;
 
-        selectionBox.gameObject.SetActive(false);
+        selectionBox.gameObject.SetActive(false);        
     }
 
     private void Update()
@@ -74,7 +75,7 @@ public class ControlManager : MonoBehaviour
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 50f, ~detectorLayer))
         {
             if (hit.transform.CompareTag("Enemy"))
             {
@@ -86,7 +87,7 @@ public class ControlManager : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Ground"))
             {
-                _playerSelection.MoveSelectedPlayers(hit.point);
+                _playerSelection.MoveAndAttackForAttackGround(hit.point);
             }
         }
     }
@@ -119,7 +120,7 @@ public class ControlManager : MonoBehaviour
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 50f, ~detectorLayer))
         {
             if (hit.transform.TryGetComponent(out PlayerUnit playerUnit))
             {
@@ -195,7 +196,7 @@ public class ControlManager : MonoBehaviour
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit, 50f, ~detectorLayer))
         {
             if (hit.transform.CompareTag("Enemy"))
             {
@@ -211,4 +212,6 @@ public class ControlManager : MonoBehaviour
             }
         }
     }
+
+
 }

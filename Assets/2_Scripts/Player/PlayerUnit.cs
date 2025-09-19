@@ -8,13 +8,15 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     [SerializeField] protected ActiveSkillSO activeSO;
     [SerializeField] private GameObject selectedMarker;
 
+
     private Collider _myCollider;
     private Animator _myAnimator;
     private NavMeshAgent agent;
-
+    private Detector detector;
     public Collider MainCollider => _myCollider;
     public GameObject GameObject => gameObject;
 
+    public int HP => _hp;
     private int _hp;
     private float attackRange;
     private float attackSpeed;
@@ -22,23 +24,26 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     private float originalAttackAnimLength; // 애니메이션의 원래 길이
     private float attackAniSpeed;
     protected int guard = 1;
-
+    bool isMoving = false;
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         _myCollider = GetComponent<Collider>();
         _myAnimator = GetComponent<Animator>();
-
+        detector = GetComponentInChildren<Detector>();
         selectedMarker.SetActive(false);
 
         agent.speed = playerSO.moveSpeed;
         _hp = playerSO.hp;
         attackRange = playerSO.attackRange;
+        detector.coll.radius = attackRange;
         attackSpeed = playerSO.attackSpeed;
 
         originalAttackAnimLength = GetAnimationLength("Attack");
         float desiredDuration = 1f / attackSpeed;
         attackAniSpeed = originalAttackAnimLength / desiredDuration;
+
+        detector.OnTargetFind += AttackTargetSet;
     }
 
     // Update 메서드 추가
@@ -132,10 +137,21 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
 
     public void Move(Vector3 position)
     {
-        // 이동 명령 시 공격 대상 초기화
+        // 이동 명령 시 도착지점에 도달할때까지는 공격 무시
         _myAnimator.SetFloat("attackSpeed", 0);
         agent.destination = position;
     }
+    public void MoveAttackGround(Vector3 position)
+    {
+        detector.EventCloseDict();
+
+        if (_targetMonster == null)
+        {
+            _myAnimator.SetFloat("attackSpeed", 0);
+            agent.destination = position;
+        }
+    }
+
     public void MonsterTargetCancel()
     {
         // 몬스터가 죽었을 때 대상을 초기화하는 메서드

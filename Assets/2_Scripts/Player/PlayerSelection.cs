@@ -71,13 +71,15 @@ public class PlayerSelection : MonoBehaviour
         }
     }
 
-    public void MoveAndAttack(Vector3 position)
+    public void MoveAndAttackForAttackGround(Vector3 position)
     {
         // 선택된 유닛이 1명일 때는 분산하지 않고 바로 이동
         if (_selectedPlayers.Count == 1)
         {
+            //여기서 움직임중에 적을 찾는 로직
             _selectedPlayers[0].MonsterTargetCancel();
-            _selectedPlayers[0].Move(position);
+            _selectedPlayers[0].MoveAttackGround(position);
+            
             return;
         }
 
@@ -89,7 +91,7 @@ public class PlayerSelection : MonoBehaviour
             Vector3 destination = position + offset;
 
             _selectedPlayers[i].MonsterTargetCancel();
-            _selectedPlayers[i].Move(destination);
+            _selectedPlayers[i].MoveAttackGround(destination);
         }
     }
 }

@@ -25,7 +25,6 @@ public class PlayerSelection : MonoBehaviour
 
             for (int i = 0; i < _selectedPlayers.Count; i++)
             {
-                Debug.Log(_selectedPlayers[i]);
                 unit[i] = _selectedPlayers[i];
             }
         }
@@ -35,6 +34,7 @@ public class PlayerSelection : MonoBehaviour
     {
         if (_unitDesignations.TryGetValue(index, out PlayerUnit[] unit) && unit.Length > 0)
         {
+            DeselectAllPlayers();
             foreach (PlayerUnit oneUnit in unit)
             {
                 if (oneUnit == null) continue;
@@ -44,6 +44,7 @@ public class PlayerSelection : MonoBehaviour
 
             }
         }
+
     }
 
     public void SelectPlayer(PlayerUnit playerUnit, bool isShiftPressed)

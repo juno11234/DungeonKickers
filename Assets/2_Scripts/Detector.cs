@@ -13,7 +13,10 @@ public class Detector : MonoBehaviour
     {
         coll = GetComponent<SphereCollider>();
     }
-
+    private void OnDisable()
+    {
+        fighters.Clear();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag(fighterTag) && other.TryGetComponent(out IFighter fighter))

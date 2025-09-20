@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,7 +31,10 @@ public class ControlManager : MonoBehaviour
 
         _inputManager.OnScrollInput += cameraControl.Zoom;
 
-        selectionBox.gameObject.SetActive(false);        
+        _inputManager.AddGroup += AddIndex;
+       _inputManager.SelectGroup += SelectIndex;
+
+        selectionBox.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -46,10 +50,23 @@ public class ControlManager : MonoBehaviour
     {
         _isShiftPressed = isPressed;
     }
-
     private void UpdateAKeyStatus(bool isPressed)
     {
         _isAKeyPressed = isPressed;
+    }
+
+    //번호를 누를때 부대지정
+    private void AddIndex(int index)
+    {
+        Debug.Log("복합" + index);
+        _playerSelection.AddUnitDesignations(index);
+    }
+    private void SelectIndex(int index)
+    {
+        if (Keyboard.current.ctrlKey.isPressed)
+            return;
+        Debug.Log("숫자키만" + index);
+        _playerSelection.SelectUnitDesignations(index);
     }
 
     //마우스를 좌클릭 누를때

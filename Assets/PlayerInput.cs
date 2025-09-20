@@ -145,6 +145,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Select1"",
+                    ""type"": ""Button"",
+                    ""id"": ""d707b06a-844e-406e-9c4c-c79176f71899"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AddGroup"",
+                    ""type"": ""Button"",
+                    ""id"": ""67e6d2b8-1666-48eb-b3bd-5db503280b71"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -213,6 +231,182 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""CameraMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""AddGroup1"",
+                    ""id"": ""08d19860-e399-40f1-aadb-dfaf4c49c982"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""id"": ""66ae17c6-94fd-48e3-83c7-13ddde14203d"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""bd5d9de6-6263-4a65-82ef-ef4dc8d746a1"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AddGroup2"",
+                    ""id"": ""9cea0f6f-bac8-4f98-b7c6-d3c97701049c"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""id"": ""3a98737d-1a5f-4272-9469-4986aae9e187"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""d6194651-4b1a-4c11-afae-9d61c7e3c018"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AddGroup3"",
+                    ""id"": ""f3e04588-e5a4-4e7f-b4c2-1e0d181b1f8e"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""id"": ""0cac7678-a7bf-412f-bd9e-c66e0f7a2568"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""ddc5ae28-285e-48cc-86cb-e5b2a72f1c3f"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""AddGroup4"",
+                    ""id"": ""e870b780-0f78-4c64-b27a-f7635e2eaf98"",
+                    ""path"": ""ButtonWithOneModifier"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Modifier"",
+                    ""id"": ""8d69c616-ee12-4e81-8e8e-33b245e50a59"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Button"",
+                    ""id"": ""953f1246-aa44-4782-849c-c826cd3e53c7"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AddGroup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7a481ea6-a420-4cad-9405-876d0b558611"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d1f9b58-00d5-47c4-9b48-121856dc39f8"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4dbba288-621b-44e6-b3f4-677f8b671c26"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8bd28f6d-2767-41e5-bc07-668da3dac76b"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Select1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -227,6 +421,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_PlayerAction_LeftShift = m_PlayerAction.FindAction("LeftShift", throwIfNotFound: true);
         m_PlayerAction_Zoom = m_PlayerAction.FindAction("Zoom", throwIfNotFound: true);
         m_PlayerAction_CameraMove = m_PlayerAction.FindAction("CameraMove", throwIfNotFound: true);
+        m_PlayerAction_Select1 = m_PlayerAction.FindAction("Select1", throwIfNotFound: true);
+        m_PlayerAction_AddGroup = m_PlayerAction.FindAction("AddGroup", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -313,6 +509,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerAction_LeftShift;
     private readonly InputAction m_PlayerAction_Zoom;
     private readonly InputAction m_PlayerAction_CameraMove;
+    private readonly InputAction m_PlayerAction_Select1;
+    private readonly InputAction m_PlayerAction_AddGroup;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerAction".
     /// </summary>
@@ -348,6 +546,14 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerAction/CameraMove".
         /// </summary>
         public InputAction @CameraMove => m_Wrapper.m_PlayerAction_CameraMove;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerAction/Select1".
+        /// </summary>
+        public InputAction @Select1 => m_Wrapper.m_PlayerAction_Select1;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerAction/AddGroup".
+        /// </summary>
+        public InputAction @AddGroup => m_Wrapper.m_PlayerAction_AddGroup;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -392,6 +598,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CameraMove.started += instance.OnCameraMove;
             @CameraMove.performed += instance.OnCameraMove;
             @CameraMove.canceled += instance.OnCameraMove;
+            @Select1.started += instance.OnSelect1;
+            @Select1.performed += instance.OnSelect1;
+            @Select1.canceled += instance.OnSelect1;
+            @AddGroup.started += instance.OnAddGroup;
+            @AddGroup.performed += instance.OnAddGroup;
+            @AddGroup.canceled += instance.OnAddGroup;
         }
 
         /// <summary>
@@ -421,6 +633,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CameraMove.started -= instance.OnCameraMove;
             @CameraMove.performed -= instance.OnCameraMove;
             @CameraMove.canceled -= instance.OnCameraMove;
+            @Select1.started -= instance.OnSelect1;
+            @Select1.performed -= instance.OnSelect1;
+            @Select1.canceled -= instance.OnSelect1;
+            @AddGroup.started -= instance.OnAddGroup;
+            @AddGroup.performed -= instance.OnAddGroup;
+            @AddGroup.canceled -= instance.OnAddGroup;
         }
 
         /// <summary>
@@ -503,5 +721,19 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCameraMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Select1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSelect1(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "AddGroup" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAddGroup(InputAction.CallbackContext context);
     }
 }

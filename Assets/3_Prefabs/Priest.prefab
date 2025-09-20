@@ -266,7 +266,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSO: {fileID: 11400000, guid: 1c6b6c2b07201314e997cd5403afa7ae, type: 2}
-  activeSO: {fileID: 0}
+  activeSO: {fileID: 11400000, guid: 31f82987d641fd84da11e4c36f4d2083, type: 2}
   selectedMarker: {fileID: 4355447626484093970}
 --- !u!136 &5295366796658849662
 CapsuleCollider:
@@ -1427,7 +1427,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 5
+  m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1524553577597528449
 MonoBehaviour:
@@ -1442,6 +1442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fighterTag: Enemy
+  coll: {fileID: 0}
 --- !u!1 &6264830156752583651
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     private Detector detector;
     public Collider MainCollider => _myCollider;
     public GameObject GameObject => gameObject;
+    public Detector Detector => detector;
 
     public int HP => _hp;
     private int _hp;
@@ -36,7 +37,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         agent.speed = playerSO.moveSpeed;
         _hp = playerSO.hp;
         attackRange = playerSO.attackRange;
-        detector.coll.radius = attackRange;
+        detector.coll.radius = 12;
         attackSpeed = playerSO.attackSpeed;
 
         originalAttackAnimLength = GetAnimationLength("Attack");
@@ -50,6 +51,10 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     // 매 프레임마다 공격 상태를 확인합니다.
     private void Update()
     {
+        if (agent.pathPending == false && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            OnDetector();
+        }
         if (agent.velocity.magnitude > 0)
         {
             _myAnimator.SetFloat("Speed", 1f);
@@ -137,7 +142,6 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
 
     public void Move(Vector3 position)
     {
-        // 이동 명령 시 도착지점에 도달할때까지는 공격 무시
         _myAnimator.SetFloat("attackSpeed", 0);
         agent.destination = position;
     }
@@ -159,6 +163,14 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         {
             _targetMonster = null;
         }
+    }
+    public void OffDetector()
+    {
+        detector.gameObject.SetActive(false);
+    }
+    public void OnDetector()
+    {
+        detector.gameObject.SetActive(true);
     }
 
     public void TakeDamage(CombatEvent combatEvent)

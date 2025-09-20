@@ -54,6 +54,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  detectorLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &5405756596444260191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46909a8cebd7dac48aaf40614bd0ce35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spreadRadius: 1
 --- !u!114 &4754662719407950471
 MonoBehaviour:
   m_ObjectHideFlags: 0

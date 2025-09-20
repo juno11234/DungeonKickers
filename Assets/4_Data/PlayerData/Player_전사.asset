@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1001
   job: "\uC804\uC0AC"
+  level: 1
+  exp: 0
   hp: 300
   attackDamage: 4
   defence: 3

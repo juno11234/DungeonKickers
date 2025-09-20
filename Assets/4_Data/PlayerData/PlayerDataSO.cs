@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerDataSO : BaseDataSO
 {
     public string job;
+    public int level;
+    public int exp;
     public int hp;
     public int attackDamage;
     public int defence;

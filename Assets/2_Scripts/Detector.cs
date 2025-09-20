@@ -53,7 +53,17 @@ public class Detector : MonoBehaviour
                 closer = pair.Value;
             }
         }
-        OnTargetFind.Invoke(closer);
+        OnTargetFind?.Invoke(closer);
     }
-
+    public void DictionaryRemove(Collider other)
+    {
+        if (fighters.ContainsKey(other))
+        {
+            fighters.Remove(other);
+        }
+    }
+    public void DictionaryReset()
+    {
+        fighters.Clear();
+    }
 }

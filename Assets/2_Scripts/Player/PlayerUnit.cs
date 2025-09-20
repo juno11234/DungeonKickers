@@ -16,16 +16,19 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     public Collider MainCollider => _myCollider;
     public GameObject GameObject => gameObject;
     public Detector Detector => detector;
+    public bool OnDie => isDead;
 
     public int HP => _hp;
     private int _hp;
     private float attackRange;
     private float attackSpeed;
+
     private IFighter _targetMonster;
     private float originalAttackAnimLength; // 애니메이션의 원래 길이
     private float attackAniSpeed;
     protected int guard = 1;
-    bool isMoving = false;
+    private bool isDead = false;
+
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -51,6 +54,8 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     // 매 프레임마다 공격 상태를 확인합니다.
     private void Update()
     {
+        if (isDead) return;
+
         if (agent.pathPending == false && agent.remainingDistance <= agent.stoppingDistance)
         {
             OnDetector();
@@ -90,8 +95,16 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     }
     private void AttackOrChase()
     {
-        if (_targetMonster != null)
+        if (_targetMonster != null && isDead == false)
         {
+            if (_targetMonster.OnDie)
+            {
+                _myAnimator.SetFloat("attackSpeed", 0);
+                detector.DictionaryRemove(_targetMonster.MainCollider);
+                _targetMonster = null;
+                detector.EventCloseDict();
+                return;
+            }
             transform.LookAt(_targetMonster.GameObject.transform.position, Vector3.up);
             // 대상과의 거리 계산
             float distance = Vector3.Distance(transform.position, _targetMonster.GameObject.transform.position);
@@ -102,6 +115,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
                 // 이동을 멈춥니다.
                 agent.ResetPath();
                 _myAnimator.SetFloat("attackSpeed", attackAniSpeed);
+
             }
             else
             {
@@ -109,11 +123,11 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
             }
 
         }
+
     }
     //힐러는 아군 힐로 수정
     public virtual void AttackEvent()
     {
-        Debug.Log(gameObject.name + "Attack");
         // CombatSystem에 공격 이벤트 추가
         CombatEvent combatEvents = new()
         {
@@ -175,11 +189,20 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
 
     public void TakeDamage(CombatEvent combatEvent)
     {
+        if (isDead) return;
+
         _hp -= combatEvent.Damage / guard;
         if (_hp <= 0)
         {
+            Die();
             //죽음
         }
     }
-
+    private void Die()
+    {
+        detector.DictionaryReset();
+        _myAnimator.SetTrigger("Die");
+        isDead = true;
+        agent.enabled = false;
+    }
 }

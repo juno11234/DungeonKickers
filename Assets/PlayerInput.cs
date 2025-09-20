@@ -163,6 +163,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Space"",
+                    ""type"": ""Button"",
+                    ""id"": ""5a9d4fb7-bdf5-4786-9ba8-313260e2159c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -407,6 +416,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Select1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3631e2c0-0e99-4cbd-96fa-d3f79c88da33"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Space"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -423,6 +443,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_PlayerAction_CameraMove = m_PlayerAction.FindAction("CameraMove", throwIfNotFound: true);
         m_PlayerAction_Select1 = m_PlayerAction.FindAction("Select1", throwIfNotFound: true);
         m_PlayerAction_AddGroup = m_PlayerAction.FindAction("AddGroup", throwIfNotFound: true);
+        m_PlayerAction_Space = m_PlayerAction.FindAction("Space", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -511,6 +532,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerAction_CameraMove;
     private readonly InputAction m_PlayerAction_Select1;
     private readonly InputAction m_PlayerAction_AddGroup;
+    private readonly InputAction m_PlayerAction_Space;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerAction".
     /// </summary>
@@ -554,6 +576,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerAction/AddGroup".
         /// </summary>
         public InputAction @AddGroup => m_Wrapper.m_PlayerAction_AddGroup;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerAction/Space".
+        /// </summary>
+        public InputAction @Space => m_Wrapper.m_PlayerAction_Space;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -604,6 +630,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @AddGroup.started += instance.OnAddGroup;
             @AddGroup.performed += instance.OnAddGroup;
             @AddGroup.canceled += instance.OnAddGroup;
+            @Space.started += instance.OnSpace;
+            @Space.performed += instance.OnSpace;
+            @Space.canceled += instance.OnSpace;
         }
 
         /// <summary>
@@ -639,6 +668,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @AddGroup.started -= instance.OnAddGroup;
             @AddGroup.performed -= instance.OnAddGroup;
             @AddGroup.canceled -= instance.OnAddGroup;
+            @Space.started -= instance.OnSpace;
+            @Space.performed -= instance.OnSpace;
+            @Space.canceled -= instance.OnSpace;
         }
 
         /// <summary>
@@ -735,5 +767,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAddGroup(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Space" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpace(InputAction.CallbackContext context);
     }
 }

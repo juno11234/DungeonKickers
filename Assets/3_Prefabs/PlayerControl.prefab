@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f261aec8652f5ed4e9eff00f67d8e7fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 20
+  panSpeed: 10
   edgeThreshold: 20
   zoomSpeed: 1
   minZoom: 5

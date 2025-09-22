@@ -42,6 +42,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         attackRange = playerSO.attackRange;
         detector.coll.radius = 12;
         attackSpeed = playerSO.attackSpeed;
+        guard = playerSO.defence;
 
         originalAttackAnimLength = GetAnimationLength("Attack");
         float desiredDuration = 1f / attackSpeed;
@@ -190,8 +191,16 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     public void TakeDamage(CombatEvent combatEvent)
     {
         if (isDead) return;
+        int dmg = combatEvent.Damage - guard;
+        if (dmg > 0)
+        {
+            _hp -= dmg;
+        }
+        else
+        {
+            _hp -= 1;
+        }
 
-        _hp -= combatEvent.Damage / guard;
         if (_hp <= 0)
         {
             Die();

@@ -32,7 +32,7 @@ public class PlayerSelection : MonoBehaviour
     }
     public void SelectUnitDesignations(int index)
     {
-        if (_unitDesignations.TryGetValue(index, out PlayerUnit[] unit) && unit.Length > 0)
+        if (_unitDesignations.TryGetValue(index, out PlayerUnit[] unit))
         {
             DeselectAllPlayers();
             foreach (PlayerUnit oneUnit in unit)

@@ -1,6 +1,26 @@
 using UnityEngine;
 using UnityEngine.AI;
+[System.Serializable]
+public struct UnitStats
+{
+    public int maxHp;
+    public int hp;
+    public float attackRange;
+    public float attackSpeed;
+    public int guard;
+    public float moveSpeed;
 
+    // 모든 필드를 초기화하는 생성자
+    public UnitStats(int hp, float attackRange, float attackSpeed, int guard, float moveSpeed)
+    {
+        this.maxHp = hp;
+        this.hp = hp;
+        this.attackRange = attackRange;
+        this.attackSpeed = attackSpeed;
+        this.guard = guard;
+        this.moveSpeed = moveSpeed;
+    }
+}
 public abstract class PlayerUnit : MonoBehaviour, IFighter
 {
 
@@ -8,25 +28,22 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     [SerializeField] protected ActiveSkillSO activeSO;
     [SerializeField] private GameObject selectedMarker;
 
+    public Collider MainCollider => _myCollider;
+    public GameObject GameObject => gameObject;
+    public Detector Detector => detector;
+    public UnitStats Stats => _stats;
+    public bool OnDie => isDead;
 
     private Collider _myCollider;
     private Animator _myAnimator;
     private NavMeshAgent agent;
     private Detector detector;
-    public Collider MainCollider => _myCollider;
-    public GameObject GameObject => gameObject;
-    public Detector Detector => detector;
-    public bool OnDie => isDead;
 
-    public int HP => _hp;
-    private int _hp;
-    private float attackRange;
-    private float attackSpeed;
+    private UnitStats _stats;
 
     private IFighter _targetMonster;
     private float originalAttackAnimLength; // 애니메이션의 원래 길이
     private float attackAniSpeed;
-    protected int guard = 1;
     private bool isDead = false;
 
     private void Start()
@@ -37,15 +54,13 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         detector = GetComponentInChildren<Detector>();
         selectedMarker.SetActive(false);
 
-        agent.speed = playerSO.moveSpeed;
-        _hp = playerSO.hp;
-        attackRange = playerSO.attackRange;
+        _stats = playerSO.GetUnitStats();
+        agent.speed = _stats.moveSpeed;
         detector.coll.radius = 12;
-        attackSpeed = playerSO.attackSpeed;
-        guard = playerSO.defence;
+
 
         originalAttackAnimLength = GetAnimationLength("Attack");
-        float desiredDuration = 1f / attackSpeed;
+        float desiredDuration = 1f / _stats.attackSpeed;
         attackAniSpeed = originalAttackAnimLength / desiredDuration;
 
         detector.OnTargetFind += AttackTargetSet;
@@ -111,7 +126,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
             float distance = Vector3.Distance(transform.position, _targetMonster.GameObject.transform.position);
 
             // 사거리 안에 들어오면 공격 시작
-            if (distance <= attackRange)
+            if (distance <= _stats.attackRange)
             {
                 // 이동을 멈춥니다.
                 agent.ResetPath();
@@ -191,17 +206,17 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     public void TakeDamage(CombatEvent combatEvent)
     {
         if (isDead) return;
-        int dmg = combatEvent.Damage - guard;
+        int dmg = combatEvent.Damage - _stats.guard;
         if (dmg > 0)
         {
-            _hp -= dmg;
+            _stats.hp -= dmg;
         }
         else
         {
-            _hp -= 1;
+            _stats.hp -= 1;
         }
 
-        if (_hp <= 0)
+        if (_stats.hp <= 0)
         {
             Die();
             //죽음

@@ -10,23 +10,24 @@ public class InputManager : MonoBehaviour
     // 마우스 왼쪽 클릭(선택) 이벤트
     public delegate void SelectActionHandler(Vector2 position);
 
-    public event SelectActionHandler OnSelectAction;
-    public event SelectActionHandler OnSelectReleased;
+    public event SelectActionHandler OnLMBInput;
+    public event SelectActionHandler OnLMBCanceled;
     // 마우스 오른쪽 클릭(명령) 이벤트
-    public event SelectActionHandler OnMoveOrAttackAction;
+    public event SelectActionHandler OnRMBInput;
 
     // 누를때와 땔때를 감지할 때
     public delegate void ButtonPushPullHandler(bool isPressed);
 
-    public event ButtonPushPullHandler OnShiftStatusChanged;
+    public event ButtonPushPullHandler OnShiftKeyChanged;
     public event ButtonPushPullHandler OnAKeyChanged;
     public event ButtonPushPullHandler OnMKeyChanged;
+    public event ButtonPushPullHandler OnPKeyChanged;
 
     //인덱스 입력
     public delegate void ButtonOlnyPushHandler(int index);
 
-    public event ButtonOlnyPushHandler SelectGroup;
-    public event ButtonOlnyPushHandler AddGroup;
+    public event ButtonOlnyPushHandler SelectGroupNumInput;
+    public event ButtonOlnyPushHandler AddGroupInput;
     //마우스 스크롤
     public delegate void ScrollHandler(float scrollValue);
 
@@ -38,42 +39,44 @@ public class InputManager : MonoBehaviour
         playerAction = input.PlayerAction;
 
         // Input System의 콜백을 Unity Event로 변환하여 외부에 알립니다.
-        playerAction.LeftButton.performed += ctx => OnSelectAction?.Invoke(Mouse.current.position.ReadValue());
-        playerAction.LeftButton.canceled += ctx => OnSelectReleased?.Invoke(Mouse.current.position.ReadValue());
+        playerAction.LeftMouseButton.performed += ctx => OnLMBInput?.Invoke(Mouse.current.position.ReadValue());
+        playerAction.LeftMouseButton.canceled += ctx => OnLMBCanceled?.Invoke(Mouse.current.position.ReadValue());
 
-        playerAction.Move.performed += ctx => OnMoveOrAttackAction?.Invoke(Mouse.current.position.ReadValue());
+        playerAction.RightMouseButton.performed += ctx => OnRMBInput?.Invoke(Mouse.current.position.ReadValue());
 
-        playerAction.LeftShift.performed += ctx => OnShiftStatusChanged?.Invoke(true);
-        playerAction.LeftShift.canceled += ctx => OnShiftStatusChanged?.Invoke(false);
+        playerAction.LeftShift.performed += ctx => OnShiftKeyChanged?.Invoke(true);
+        playerAction.LeftShift.canceled += ctx => OnShiftKeyChanged?.Invoke(false);
 
         playerAction.Zoom.performed += ctx => OnScrollInput?.Invoke(ctx.ReadValue<float>());
-        playerAction.Attack.performed += ctx => OnAKeyChanged.Invoke(true);
+
+        playerAction.AttackGround.performed += ctx => OnAKeyChanged.Invoke(true);
         playerAction.M.performed += ctx => OnMKeyChanged.Invoke(true);
-     
-        playerAction.Select1.performed += ctx =>
+        playerAction.Patrol.performed += ctx => OnPKeyChanged.Invoke(true);
+
+        playerAction.SelectNumberPad.performed += ctx =>
         {
             var control = ctx.control;
             if (control.displayName == "1")
-                SelectGroup?.Invoke(0);
+                SelectGroupNumInput?.Invoke(0);
             else if (control.displayName == "2")
-                SelectGroup?.Invoke(1);
+                SelectGroupNumInput?.Invoke(1);
             else if (control.displayName == "3")
-                SelectGroup?.Invoke(2);
+                SelectGroupNumInput?.Invoke(2);
             else if (control.displayName == "4")
-                SelectGroup?.Invoke(3);
+                SelectGroupNumInput?.Invoke(3);
         };
 
         playerAction.AddGroup.performed += ctx =>
         {
             var control = ctx.control;
             if (control.displayName == "1")
-                AddGroup?.Invoke(0);
+                AddGroupInput?.Invoke(0);
             else if (control.displayName == "2")
-                AddGroup?.Invoke(1);
+                AddGroupInput?.Invoke(1);
             else if (control.displayName == "3")
-                AddGroup?.Invoke(2);
+                AddGroupInput?.Invoke(2);
             else if (control.displayName == "4")
-                AddGroup?.Invoke(3);
+                AddGroupInput?.Invoke(3);
         };
 
     }

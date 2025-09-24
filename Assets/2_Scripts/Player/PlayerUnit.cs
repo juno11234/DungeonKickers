@@ -23,7 +23,8 @@ public struct UnitStats
 }
 public abstract class PlayerUnit : MonoBehaviour, IFighter
 {
-
+    private delegate void ArrivalsDestination();
+    private event ArrivalsDestination arrivalsDestination;
     [SerializeField] protected PlayerDataSO playerSO;
     [SerializeField] protected ActiveSkillSO activeSO;
     [SerializeField] private GameObject selectedMarker;
@@ -64,6 +65,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         attackAniSpeed = originalAttackAnimLength / desiredDuration;
 
         detector.OnTargetFind += AttackTargetSet;
+        
     }
 
     // Update 메서드 추가
@@ -71,11 +73,12 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     private void Update()
     {
         if (isDead) return;
-
+       
         if (agent.pathPending == false && agent.remainingDistance <= agent.stoppingDistance)
-        {
+        {          
             OnDetector();
         }
+
         if (agent.velocity.magnitude > 0)
         {
             _myAnimator.SetFloat("Speed", 1f);
@@ -165,7 +168,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         selectedMarker.SetActive(true);
     }
 
-    public void CanceledSelected()
+    public void deSelected()
     {
         selectedMarker.SetActive(false);
     }
@@ -175,7 +178,8 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         _myAnimator.SetFloat("attackSpeed", 0);
         agent.destination = position;
     }
-    public void MoveAttackGround(Vector3 position)
+    //
+    public void AttackGround(Vector3 position)
     {
         detector.EventCloseDict();
 
@@ -184,6 +188,14 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
             _myAnimator.SetFloat("attackSpeed", 0);
             agent.destination = position;
         }
+    }
+    Vector3 startPos;
+    Vector3 endPos;
+   
+    public void PatrolSet(Vector3 pos)
+    {
+        startPos = transform.position;
+        endPos = pos;        
     }
 
     public void MonsterTargetCancel()

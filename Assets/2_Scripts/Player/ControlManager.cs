@@ -7,6 +7,13 @@ using UnityEngine.InputSystem;
 
 public class ControlManager : MonoBehaviour
 {
+    private enum KeyType
+    {
+        None,
+        A,
+        M,
+        P
+    }
 
     [SerializeField] private InputManager _inputManager;
     [SerializeField] private PlayerSelection _playerSelection;
@@ -15,36 +22,37 @@ public class ControlManager : MonoBehaviour
     [SerializeField] private Texture2D Acursor;
     [SerializeField] private Texture2D Mcursor;
     [SerializeField] private Texture2D Pcursor;
+
     [SerializeField] private RectTransform selectionBox;
+
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask detectorLayer;
 
     public CursorMode cursorMode = CursorMode.Auto;
     public Vector2 hotSpot = Vector2.zero;
+
     private Camera _mainCam;
     private bool _isShiftPressed;
-    private bool _isAKeyPressed;
-    private bool _isMkeyPressed;
-    private bool _isPkeyPressed;
     private bool _isDragging = false;
     private Vector2 _startMousePos;
+    private KeyType _keyType;
 
     void Start()
     {
         _mainCam = Camera.main;
-        _inputManager.OnLMBInput += LMBInput;
-        _inputManager.OnRMBInput += RMBInput;
-        _inputManager.OnShiftKeyChanged += ShiftStatusInput;
-        _inputManager.OnAKeyChanged += AKeyStatusInput;
-        _inputManager.OnMKeyChanged += MKeyStatusInput;
-        _inputManager.OnPKeyChanged += PKeyStatusInput;
-        _inputManager.OnLMBCanceled += LMBCanceled;
 
+        _inputManager.OnLMBInput += LMBInput;
+        _inputManager.OnLMBCanceled += LMBCanceled;
+        _inputManager.OnRMBInput += RMBInput;
         _inputManager.OnScrollInput += cameraControl.Zoom;
+
+        _inputManager.OnShiftKeyChanged += ShiftStatusInput;
+        _inputManager.OnAKeyChanged += isPressed => KeyTypeInput(isPressed, KeyType.A);
+        _inputManager.OnMKeyChanged += isPressed => KeyTypeInput(isPressed, KeyType.M);
+        _inputManager.OnPKeyChanged += isPressed => KeyTypeInput(isPressed, KeyType.P);
 
         _inputManager.AddGroupInput += AddIndexInput;
         _inputManager.SelectGroupNumInput += SelectIndexInput;
-
 
         selectionBox.gameObject.SetActive(false);
     }
@@ -53,42 +61,48 @@ public class ControlManager : MonoBehaviour
     {
         if (_isDragging)
         {
-
             Vector2 currentMousePos = Mouse.current.position.ReadValue();
             UpdateSelectionBox(_startMousePos, currentMousePos);
         }
     }
-
 
     //쉬프트 누름
     private void ShiftStatusInput(bool isPressed)
     {
         _isShiftPressed = isPressed;
     }
-    //A키 누름    
-    public void AKeyStatusInput(bool isPressed)
+    //입력된 키타입
+    private void KeyTypeInput(bool isPressed, KeyType key)
     {
-        _isAKeyPressed = isPressed;
-        _isMkeyPressed = false;
-        _isPkeyPressed = false;
-        Cursor.SetCursor(Acursor, hotSpot, cursorMode);
+        if (isPressed)
+        {
+            _keyType = key;
+            Texture2D cursorTexture = null;
+            switch (_keyType)
+            {
+                case KeyType.A:
+                    cursorTexture = Acursor;
+                    break;
+                case KeyType.M:
+                    cursorTexture = Mcursor;
+                    break;
+                case KeyType.P:
+                    cursorTexture = Pcursor;
+                    break;
+            }
+            if (cursorTexture != null)
+            {
+                Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
+            }
+        }
     }
-    //M키 누름
-    public void MKeyStatusInput(bool isPressed)
+    //입력된 키 취소
+    private void ResetControlMode()
     {
-        _isMkeyPressed = isPressed;
-        _isAKeyPressed = false;
-        _isPkeyPressed = false;
-        Cursor.SetCursor(Mcursor, hotSpot, cursorMode);
+        _keyType = KeyType.None;
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
-    //P키 누름
-    public void PKeyStatusInput(bool isPressed)
-    {
-        _isPkeyPressed = isPressed;
-        _isMkeyPressed = false;
-        _isAKeyPressed = false;
-        Cursor.SetCursor(Pcursor, hotSpot, cursorMode);
-    }
+
 
     //번호를 누를때 부대지정
     private void AddIndexInput(int index)
@@ -103,6 +117,7 @@ public class ControlManager : MonoBehaviour
         _playerSelection.SelectUnit_Designations(index);
     }
 
+
     //마우스를 좌클릭 누를때
     private void LMBInput(Vector2 mousePos)
     {
@@ -110,21 +125,21 @@ public class ControlManager : MonoBehaviour
         {
             return; // UI 클릭이면 게임 입력 무시
         }
-        if (_isPkeyPressed)
-        {
-            PatrolInput(mousePos);
-            return;
-        }
-        else if (_isAKeyPressed)
-        {
-            AttackGroundInput(mousePos);
-            return;
-        }
-        else if (_isMkeyPressed)
-        {
 
-            RMBInput(mousePos);
-            return;
+        switch (_keyType)
+        {
+            case KeyType.P:
+                PatrolInput(mousePos);
+                ResetControlMode();
+                return;
+            case KeyType.A:
+                AttackGroundInput(mousePos);
+                ResetControlMode();
+                return;
+            case KeyType.M:
+                RMBInput(mousePos); // Move 모드일 때는 우클릭 로직과 동일
+                ResetControlMode();
+                return;
         }
 
         _isDragging = true;
@@ -136,42 +151,13 @@ public class ControlManager : MonoBehaviour
             _playerSelection.DeselectAllUnit();
         }
     }
-    private void PatrolInput(Vector2 mousePos)
-    {
-        _playerSelection.SelectUnit_Patrol(mousePos);
-    }
-    //어택땅 입력시
-    private void AttackGroundInput(Vector2 mousePos)
-    {
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        Ray ray = _mainCam.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 50f, ~detectorLayer))
-        {
-            if (hit.transform.CompareTag("Enemy"))
-            {
-                var monster = CombatSystem.Instance.GetMonsterOrNull(hit.collider);
-                if (monster != null)
-                {
-                    _playerSelection.SelectUnit_Attack(monster);
-                }
-            }
-            else if (hit.transform.CompareTag("Ground"))
-            {
-                _playerSelection.SelectUnit_AttackGround(hit.point);
-            }
-        }
-    }
-
     //마우스를 뗄때 유닛 선택방식결정
     private void LMBCanceled(Vector2 endMousePos)
     {
-        if (_isAKeyPressed || _isMkeyPressed)
+        // 모드가 활성화된 상태라면 드래그 선택 로직 무시
+        if (_keyType != KeyType.None)
         {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            _isAKeyPressed = false;
-            _isMkeyPressed = false;
+            // ResetControlMode()는 LMBInput에서 호출되므로, 여기서는 할 필요 없음
             return;
         }
 
@@ -187,7 +173,6 @@ public class ControlManager : MonoBehaviour
             SelectSingleUnit(endMousePos);
         }
     }
-
     // 마우스 단일 클릭 유닛 선택 로직
     private void SelectSingleUnit(Vector2 mousePos)
     {
@@ -209,7 +194,6 @@ public class ControlManager : MonoBehaviour
             }
         }
     }
-    
     // 드래그 박스 UI 업데이트
     private void UpdateSelectionBox(Vector2 startPos, Vector2 currentPos)
     {
@@ -257,17 +241,10 @@ public class ControlManager : MonoBehaviour
             }
         }
     }
-
     //우클릭 로직
     private void RMBInput(Vector2 mousePos)
     {
-        if (_isAKeyPressed || _isMkeyPressed || _isPkeyPressed)
-        {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            _isAKeyPressed = false;
-            _isMkeyPressed = false;
-            _isPkeyPressed = false;
-        }
+        ResetControlMode();
 
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         RaycastHit hit;
@@ -289,6 +266,35 @@ public class ControlManager : MonoBehaviour
         }
     }
 
+    private void PatrolInput(Vector2 mousePos)
+    {
+        _playerSelection.SelectUnit_Patrol(mousePos);
+    }
+    //어택땅 입력시
+    private void AttackGroundInput(Vector2 mousePos)
+    {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        Ray ray = _mainCam.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, 50f, ~detectorLayer))
+        {
+            if (hit.transform.CompareTag("Enemy"))
+            {
+                var monster = CombatSystem.Instance.GetMonsterOrNull(hit.collider);
+                if (monster != null)
+                {
+                    _playerSelection.SelectUnit_Attack(monster);
+                }
+            }
+            else if (hit.transform.CompareTag("Ground"))
+            {
+                _playerSelection.SelectUnit_AttackGround(hit.point);
+            }
+        }
+    }
+   
+    //마우스 UI위인지 체크
     private bool IsPointerOverUI()
     {
         if (EventSystem.current == null) return false;

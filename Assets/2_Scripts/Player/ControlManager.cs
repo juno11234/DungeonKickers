@@ -133,11 +133,12 @@ public class ControlManager : MonoBehaviour
                 ResetControlMode();
                 return;
             case KeyType.A:
-                AttackGroundInput(mousePos);
+                HandleGroundOrEnemyInput(mousePos, true);
                 ResetControlMode();
                 return;
             case KeyType.M:
-                RMBInput(mousePos); // Move 모드일 때는 우클릭 로직과 동일
+                // Move 모드일 때는 우클릭 로직과 동일
+                HandleGroundOrEnemyInput(mousePos, false);
                 ResetControlMode();
                 return;
         }
@@ -157,7 +158,6 @@ public class ControlManager : MonoBehaviour
         // 모드가 활성화된 상태라면 드래그 선택 로직 무시
         if (_keyType != KeyType.None)
         {
-            // ResetControlMode()는 LMBInput에서 호출되므로, 여기서는 할 필요 없음
             return;
         }
 
@@ -246,38 +246,19 @@ public class ControlManager : MonoBehaviour
     {
         ResetControlMode();
 
-        Ray ray = _mainCam.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, 50f, ~detectorLayer))
-        {
-            if (hit.transform.CompareTag("Enemy"))
-            {
-                var monster = CombatSystem.Instance.GetMonsterOrNull(hit.collider);
-                if (monster != null)
-                {
-                    _playerSelection.SelectUnit_Attack(monster);
-                }
-            }
-            else if (hit.transform.CompareTag("Ground"))
-            {
-                _playerSelection.SelectUnit_Move(hit.point);
-            }
-        }
+        HandleGroundOrEnemyInput(mousePos, false);
     }
 
     private void PatrolInput(Vector2 mousePos)
     {
         _playerSelection.SelectUnit_Patrol(mousePos);
     }
-    //어택땅 입력시
-    private void AttackGroundInput(Vector2 mousePos)
-    {
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        Ray ray = _mainCam.ScreenPointToRay(mousePos);
-        RaycastHit hit;
 
-        if (Physics.Raycast(ray, out hit, 50f, ~detectorLayer))
+    // 레이캐스트를 통해 땅 또는 적을 선택하는 공통 로직
+    private void HandleGroundOrEnemyInput(Vector2 mousePos, bool isAttackCommand)
+    {
+        Ray ray = _mainCam.ScreenPointToRay(mousePos);
+        if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~detectorLayer))
         {
             if (hit.transform.CompareTag("Enemy"))
             {
@@ -289,11 +270,17 @@ public class ControlManager : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Ground"))
             {
-                _playerSelection.SelectUnit_AttackGround(hit.point);
+                if (isAttackCommand)
+                {
+                    _playerSelection.SelectUnit_AttackGround(hit.point);
+                }
+                else
+                {
+                    _playerSelection.SelectUnit_Move(hit.point);
+                }
             }
         }
     }
-   
     //마우스 UI위인지 체크
     private bool IsPointerOverUI()
     {

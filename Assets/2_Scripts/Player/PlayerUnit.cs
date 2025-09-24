@@ -192,7 +192,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     Vector3 startPos;
     Vector3 endPos;
    
-    public void PatrolSet(Vector3 pos)
+    public void Patrol(Vector3 pos)
     {
         startPos = transform.position;
         endPos = pos;        

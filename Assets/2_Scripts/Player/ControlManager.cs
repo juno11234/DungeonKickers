@@ -107,14 +107,14 @@ public class ControlManager : MonoBehaviour
     //번호를 누를때 부대지정
     private void AddIndexInput(int index)
     {
-        _playerSelection.AddUnit_Designations(index);
+        _playerSelection.AddUnitDesignation(index);
     }
     //부대지정된 유닛들 선택
     private void SelectIndexInput(int index)
     {
         if (Keyboard.current.ctrlKey.isPressed)
             return;
-        _playerSelection.SelectUnit_Designations(index);
+        _playerSelection.SelectUnitDesignation(index);
     }
 
 

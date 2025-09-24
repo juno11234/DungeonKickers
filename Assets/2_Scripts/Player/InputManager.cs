@@ -20,6 +20,7 @@ public class InputManager : MonoBehaviour
 
     public event ButtonPushPullHandler OnShiftStatusChanged;
     public event ButtonPushPullHandler OnAKeyChanged;
+    public event ButtonPushPullHandler OnMKeyChanged;
 
     //인덱스 입력
     public delegate void ButtonOlnyPushHandler(int index);
@@ -47,6 +48,7 @@ public class InputManager : MonoBehaviour
 
         playerAction.Zoom.performed += ctx => OnScrollInput?.Invoke(ctx.ReadValue<float>());
         playerAction.Attack.performed += ctx => OnAKeyChanged.Invoke(true);
+        playerAction.M.performed += ctx => OnMKeyChanged.Invoke(true);
      
         playerAction.Select1.performed += ctx =>
         {

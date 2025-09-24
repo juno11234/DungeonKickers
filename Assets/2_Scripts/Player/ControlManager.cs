@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class ControlManager : MonoBehaviour
@@ -10,13 +11,18 @@ public class ControlManager : MonoBehaviour
     [SerializeField] private PlayerSelection _playerSelection;
     [SerializeField] private CameraMovement cameraControl;
 
+    [SerializeField] private Texture2D Acursor;
+    [SerializeField] private Texture2D Mcursor;
     [SerializeField] private RectTransform selectionBox;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask detectorLayer;
 
+    public CursorMode cursorMode = CursorMode.Auto;
+    public Vector2 hotSpot = Vector2.zero;
     private Camera _mainCam;
     private bool _isShiftPressed;
     private bool _isAKeyPressed;
+    private bool _isMkeyPressed;
     private bool isDragging = false;
     private Vector2 startMousePos;
 
@@ -27,12 +33,14 @@ public class ControlManager : MonoBehaviour
         _inputManager.OnMoveOrAttackAction += HandleMoveOrAttackInput;
         _inputManager.OnShiftStatusChanged += UpdateShiftStatus;
         _inputManager.OnAKeyChanged += UpdateAKeyStatus;
+        _inputManager.OnMKeyChanged += UpdateMKeyStatus;
         _inputManager.OnSelectReleased += HandleSelectReleased;
 
         _inputManager.OnScrollInput += cameraControl.Zoom;
 
         _inputManager.AddGroup += AddIndex;
-       _inputManager.SelectGroup += SelectIndex;
+        _inputManager.SelectGroup += SelectIndex;
+
 
         selectionBox.gameObject.SetActive(false);
     }
@@ -45,36 +53,55 @@ public class ControlManager : MonoBehaviour
             UpdateSelectionBox(startMousePos, currentMousePos);
         }
     }
+
     //쉬프트 누름
     private void UpdateShiftStatus(bool isPressed)
     {
         _isShiftPressed = isPressed;
     }
-    private void UpdateAKeyStatus(bool isPressed)
+    public void UpdateAKeyStatus(bool isPressed)
     {
         _isAKeyPressed = isPressed;
+        _isMkeyPressed = false;
+        Cursor.SetCursor(Acursor, hotSpot, cursorMode);
+    }
+    public void UpdateMKeyStatus(bool isPressed)
+    {
+        Debug.Log("복합");
+        _isMkeyPressed = isPressed;
+        _isAKeyPressed = false;
+        Cursor.SetCursor(Mcursor, hotSpot, cursorMode);
     }
 
     //번호를 누를때 부대지정
     private void AddIndex(int index)
     {
-        Debug.Log("복합" + index);
+        
         _playerSelection.AddUnitDesignations(index);
     }
     private void SelectIndex(int index)
     {
         if (Keyboard.current.ctrlKey.isPressed)
             return;
-        Debug.Log("숫자키만" + index);
         _playerSelection.SelectUnitDesignations(index);
     }
 
     //마우스를 좌클릭 누를때
     private void HandleSelectInput(Vector2 mousePos)
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
+
         if (_isAKeyPressed)
         {
             AttackGround(mousePos);
+            return;
+        }
+        else if (_isMkeyPressed)
+        {
+
+            HandleMoveOrAttackInput(mousePos);
             return;
         }
 
@@ -89,6 +116,7 @@ public class ControlManager : MonoBehaviour
     }
     private void AttackGround(Vector2 mousePos)
     {
+        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         RaycastHit hit;
 
@@ -114,6 +142,7 @@ public class ControlManager : MonoBehaviour
     {
         if (_isAKeyPressed)
         {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             _isAKeyPressed = false;
             return;
         }
@@ -206,10 +235,13 @@ public class ControlManager : MonoBehaviour
     //우클릭 로직
     private void HandleMoveOrAttackInput(Vector2 mousePos)
     {
-        if (_isAKeyPressed)
+        if (_isAKeyPressed || _isMkeyPressed)
         {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             _isAKeyPressed = false;
+            _isMkeyPressed = false;
         }
+
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         RaycastHit hit;
 

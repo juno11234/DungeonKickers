@@ -42,7 +42,7 @@ public class ControlManager : MonoBehaviour
         _mainCam = Camera.main;
 
         _inputManager.OnLMBInput += LMBInput;
-        _inputManager.OnLMBCanceled += LMBCanceled;
+        _inputManager.OnLMBReleased += LMBReleased;
         _inputManager.OnRMBInput += RMBInput;
         _inputManager.OnScrollInput += cameraControl.Zoom;
 
@@ -121,7 +121,7 @@ public class ControlManager : MonoBehaviour
     //마우스를 좌클릭 누를때
     private void LMBInput(Vector2 mousePos)
     {
-        if (IsPointerOverUI())
+        if (IsPointerOverUI(mousePos))
         {
             return; // UI 클릭이면 게임 입력 무시
         }
@@ -153,7 +153,7 @@ public class ControlManager : MonoBehaviour
         }
     }
     //마우스를 뗄때 유닛 선택방식결정
-    private void LMBCanceled(Vector2 endMousePos)
+    private void LMBReleased(Vector2 endMousePos)
     {
         // 모드가 활성화된 상태라면 드래그 선택 로직 무시
         if (_keyType != KeyType.None)
@@ -255,7 +255,7 @@ public class ControlManager : MonoBehaviour
     }
 
     // 레이캐스트를 통해 땅 또는 적을 선택하는 공통 로직
-    private void HandleGroundOrEnemyInput(Vector2 mousePos, bool isAttackCommand)
+    private void HandleGroundOrEnemyInput(Vector2 mousePos, bool aKeyInput)
     {
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~detectorLayer))
@@ -270,7 +270,7 @@ public class ControlManager : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Ground"))
             {
-                if (isAttackCommand)
+                if (aKeyInput)
                 {
                     _playerSelection.SelectUnit_AttackGround(hit.point);
                 }
@@ -282,13 +282,13 @@ public class ControlManager : MonoBehaviour
         }
     }
     //마우스 UI위인지 체크
-    private bool IsPointerOverUI()
+    private bool IsPointerOverUI(Vector2 mousePos)
     {
         if (EventSystem.current == null) return false;
 
         PointerEventData eventData = new PointerEventData(EventSystem.current)
         {
-            position = Mouse.current.position.ReadValue()
+            position = mousePos
         };
 
         List<RaycastResult> results = new List<RaycastResult>();

@@ -11,7 +11,7 @@ public class InputManager : MonoBehaviour
     public delegate void SelectActionHandler(Vector2 position);
 
     public event SelectActionHandler OnLMBInput;
-    public event SelectActionHandler OnLMBCanceled;
+    public event SelectActionHandler OnLMBReleased;
     // 마우스 오른쪽 클릭(명령) 이벤트
     public event SelectActionHandler OnRMBInput;
 
@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour
 
         // Input System의 콜백을 Unity Event로 변환하여 외부에 알립니다.
         playerAction.LeftMouseButton.performed += ctx => OnLMBInput?.Invoke(Mouse.current.position.ReadValue());
-        playerAction.LeftMouseButton.canceled += ctx => OnLMBCanceled?.Invoke(Mouse.current.position.ReadValue());
+        playerAction.LeftMouseButton.canceled += ctx => OnLMBReleased?.Invoke(Mouse.current.position.ReadValue());
 
         playerAction.RightMouseButton.performed += ctx => OnRMBInput?.Invoke(Mouse.current.position.ReadValue());
 

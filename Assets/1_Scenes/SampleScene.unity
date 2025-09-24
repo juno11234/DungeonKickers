@@ -9265,6 +9265,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8148227443062355607, guid: 2ef64bc9cd383d7448481df5f77f3dce, type: 3}
+      propertyPath: Pcursor
+      value: 
+      objectReference: {fileID: 2800000, guid: 861edee2b04549c4482afcaabce0a354, type: 3}
+    - target: {fileID: 8148227443062355607, guid: 2ef64bc9cd383d7448481df5f77f3dce, type: 3}
       propertyPath: selectionBox
       value: 
       objectReference: {fileID: 196709012}

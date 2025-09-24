@@ -117,7 +117,6 @@ public class ControlManager : MonoBehaviour
         _playerSelection.SelectUnitDesignation(index);
     }
 
-
     //마우스를 좌클릭 누를때
     private void LMBInput(Vector2 mousePos)
     {

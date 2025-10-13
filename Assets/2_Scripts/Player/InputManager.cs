@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.Controls;
 
 public class InputManager : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class InputManager : MonoBehaviour
 
     public event ButtonOlnyPushHandler SelectGroupNumInput;
     public event ButtonOlnyPushHandler AddGroupInput;
+    public event ButtonOlnyPushHandler SkillInput;
     //마우스 스크롤
     public delegate void ScrollHandler(float scrollValue);
 
@@ -68,17 +70,31 @@ public class InputManager : MonoBehaviour
 
         playerAction.AddGroup.performed += ctx =>
         {
-            var control = ctx.control;
-            if (control.displayName == "1")
-                AddGroupInput?.Invoke(0);
-            else if (control.displayName == "2")
-                AddGroupInput?.Invoke(1);
-            else if (control.displayName == "3")
-                AddGroupInput?.Invoke(2);
-            else if (control.displayName == "4")
-                AddGroupInput?.Invoke(3);
+            if (ctx.control is KeyControl key)
+            {
+                switch (key.keyCode)
+                {
+                    case Key.Digit1: AddGroupInput?.Invoke(0); break;
+                    case Key.Digit2: AddGroupInput?.Invoke(1); break;
+                    case Key.Digit3: AddGroupInput?.Invoke(2); break;
+                    case Key.Digit4: AddGroupInput?.Invoke(3); break;
+                }
+            }
         };
 
+        playerAction.Skill.performed += ctx =>
+        {
+            if (ctx.control is KeyControl key)
+            {
+                switch (key.keyCode)
+                {
+                    case Key.Q: SkillInput?.Invoke(0); break;
+                    case Key.W: SkillInput?.Invoke(1); break;
+                    case Key.E: SkillInput?.Invoke(2); break;
+                    case Key.R: SkillInput?.Invoke(3); break;
+                }
+            }
+        };
     }
 
     private void OnEnable()

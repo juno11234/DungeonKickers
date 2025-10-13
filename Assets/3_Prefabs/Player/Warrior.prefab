@@ -1856,8 +1856,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSO: {fileID: 11400000, guid: e37210cc3a9368f43bf92ae781cd6a4c, type: 2}
-  activeSO: {fileID: 11400000, guid: 38203bf8de472164c86183d8ed046d6e, type: 2}
+  activeSkillSO: {fileID: 11400000, guid: e9bda2f4c9826c84f98bb82f0d6a150c, type: 2}
   selectedMarker: {fileID: 4218624153168660434}
+  skillIndex: 0
+  skillTimer: 0
+  buffTime: 10
+  buffEffect: {fileID: 0}
 --- !u!195 &8333581855516876622
 NavMeshAgent:
   m_ObjectHideFlags: 0

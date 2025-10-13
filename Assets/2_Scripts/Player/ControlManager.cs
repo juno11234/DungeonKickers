@@ -4,6 +4,7 @@ using System.Drawing;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class ControlManager : MonoBehaviour
 {
@@ -12,7 +13,8 @@ public class ControlManager : MonoBehaviour
         None,
         A,
         M,
-        P
+        P,
+        TargetingSkill
     }
 
     [SerializeField] private InputManager _inputManager;
@@ -53,8 +55,10 @@ public class ControlManager : MonoBehaviour
 
         _inputManager.AddGroupInput += AddIndexInput;
         _inputManager.SelectGroupNumInput += SelectIndexInput;
+        _inputManager.SkillInput += ReadySkillInput;
 
         selectionBox.gameObject.SetActive(false);
+        _playerSelection.targetSkillChageEvent += TargetSkillReady;
     }
 
     private void Update()
@@ -89,6 +93,9 @@ public class ControlManager : MonoBehaviour
                 case KeyType.P:
                     cursorTexture = Pcursor;
                     break;
+                case KeyType.TargetingSkill:
+                    cursorTexture = currentTargetCursor;
+                    break;
             }
             if (cursorTexture != null)
             {
@@ -96,6 +103,14 @@ public class ControlManager : MonoBehaviour
             }
         }
     }
+    Texture2D currentTargetCursor;
+    //커서 변경시
+    private void TargetSkillReady(Texture2D Cursor, float range)
+    {
+        currentTargetCursor = Cursor;
+        KeyTypeInput(true, KeyType.TargetingSkill);
+    }
+
     //입력된 키 취소
     private void ResetControlMode()
     {
@@ -116,7 +131,10 @@ public class ControlManager : MonoBehaviour
             return;
         _playerSelection.SelectUnitDesignation(index);
     }
-
+    private void ReadySkillInput(int index)
+    {
+        _playerSelection.SelectUnitSkillCheck(index);
+    }
     //마우스를 좌클릭 누를때
     private void LMBInput(Vector2 mousePos)
     {
@@ -128,16 +146,20 @@ public class ControlManager : MonoBehaviour
         switch (_keyType)
         {
             case KeyType.P:
-                PatrolInput(mousePos);
+                HandleGroundOrEnemyInput(mousePos, KeyType.P);
                 ResetControlMode();
                 return;
             case KeyType.A:
-                HandleGroundOrEnemyInput(mousePos, true);
+                HandleGroundOrEnemyInput(mousePos, KeyType.A);
                 ResetControlMode();
                 return;
             case KeyType.M:
                 // Move 모드일 때는 우클릭 로직과 동일
-                HandleGroundOrEnemyInput(mousePos, false);
+                HandleGroundOrEnemyInput(mousePos, KeyType.M);
+                ResetControlMode();
+                return;
+            case KeyType.TargetingSkill:
+                HandleTargetSkill(mousePos);
                 ResetControlMode();
                 return;
         }
@@ -245,16 +267,11 @@ public class ControlManager : MonoBehaviour
     {
         ResetControlMode();
 
-        HandleGroundOrEnemyInput(mousePos, false);
-    }
-
-    private void PatrolInput(Vector2 mousePos)
-    {
-        _playerSelection.SelectUnit_Patrol(mousePos);
+        HandleGroundOrEnemyInput(mousePos, KeyType.M);
     }
 
     // 레이캐스트를 통해 땅 또는 적을 선택하는 공통 로직
-    private void HandleGroundOrEnemyInput(Vector2 mousePos, bool aKeyInput)
+    private void HandleGroundOrEnemyInput(Vector2 mousePos, KeyType keyType)
     {
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~detectorLayer))
@@ -269,17 +286,33 @@ public class ControlManager : MonoBehaviour
             }
             else if (hit.transform.CompareTag("Ground"))
             {
-                if (aKeyInput)
+                switch (keyType)
                 {
-                    _playerSelection.SelectUnit_AttackGround(hit.point);
-                }
-                else
-                {
-                    _playerSelection.SelectUnit_Move(hit.point);
+                    case KeyType.None:
+                        break;
+                    case KeyType.A:
+                        _playerSelection.SelectUnit_AttackGround(hit.point);
+                        break;
+                    case KeyType.M:
+                        _playerSelection.SelectUnit_Move(hit.point);
+                        break;
+                    case KeyType.P:
+                        _playerSelection.SelectUnit_Patrol(hit.point);
+                        break;
                 }
             }
         }
     }
+    //스킬 확정시
+    private void HandleTargetSkill(Vector2 mousePos)
+    {
+        Ray ray = _mainCam.ScreenPointToRay(mousePos);
+        if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~detectorLayer))
+        {
+            _playerSelection.TargetingSkillUse(hit.point);
+        }
+    }
+
     //마우스 UI위인지 체크
     private bool IsPointerOverUI(Vector2 mousePos)
     {

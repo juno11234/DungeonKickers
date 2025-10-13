@@ -16,5 +16,6 @@ MonoBehaviour:
   className: "\uC0AC\uC81C"
   skillName: "\uBCF4\uD638"
   value: 50
-  coolTime: 50
-  manaConsum: 50
+  coolTime: 30
+  manaConsum: 1
+  skillIcon: {fileID: 0}

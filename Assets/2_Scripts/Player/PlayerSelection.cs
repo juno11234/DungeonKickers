@@ -2,15 +2,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq; // LINQ를 사용하여 리스트에서 null을 쉽게 제거하기 위해 추가
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerSelection : MonoBehaviour
 {
+    [SerializeField] private PlayerUnit[] allPlayer;
     // List 대신 HashSet을 사용하여 중복을 방지하고 추가/제거/검색 성능을 향상
     private HashSet<PlayerUnit> _selectedPlayers = new HashSet<PlayerUnit>();
     private Dictionary<int, List<PlayerUnit>> _unitDesignations = new Dictionary<int, List<PlayerUnit>>();
 
+    TargetingSkillerBase currentTargetingSkiller;
+    public event Action<Texture2D, float> targetSkillChageEvent;
+
     [Header("Move Settings")]
     public float spreadRadius = 1f;
+
+    private void Start()
+    {
+        foreach (var player in allPlayer)
+        {
+            if (player is TargetingSkillerBase targetingSkiller)
+            {
+                targetingSkiller.cursorChangeEvent += TargetingCursorChange;
+            }
+        }
+    }
 
     // 유닛 선택
     public void SelectUnit(PlayerUnit playerUnit, bool isShiftPressed)
@@ -64,6 +80,42 @@ public class PlayerSelection : MonoBehaviour
                 unit.Selected();
             }
         }
+    }
+    //스킬사용이가능한가
+
+    public void SelectUnitSkillCheck(int index)
+    {
+        foreach (var player in _selectedPlayers)
+        {
+            if (player.SkillCheck(index))
+            {
+                Debug.Log("스킬" + index);
+                if (player is TargetingSkillerBase targetSkiller)
+                {
+                    currentTargetingSkiller = targetSkiller;
+                    currentTargetingSkiller.CursorChange();
+                }
+                else
+                {
+                    player.Skill();
+                }
+            }
+        }
+    }
+
+    //커서만 바꿈
+    public void TargetingCursorChange(Texture2D skillCursor, float range)
+    {
+        //어떻게 스킬범위에맞게 마우스 커서를 만들어주지?
+        //레이를 업데이트로 쏘게 만들어서 계속 따라다니게 만든다
+        targetSkillChageEvent?.Invoke(skillCursor, range);
+    }
+    //스킬발동 확정
+    public void TargetingSkillUse(Vector3 pos)
+    {
+        //어떻게 파이어볼에게 pos를 전달해주지?
+        currentTargetingSkiller.TargetPos = pos;
+        currentTargetingSkiller.Skill();
     }
 
     // 유닛 명령 공통 처리

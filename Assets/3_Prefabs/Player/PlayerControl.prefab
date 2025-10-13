@@ -86,6 +86,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46909a8cebd7dac48aaf40614bd0ce35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allPlayer:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   spreadRadius: 1
 --- !u!114 &4754662719407950471
 MonoBehaviour:

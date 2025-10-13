@@ -607,7 +607,8 @@ Transform:
   m_LocalPosition: {x: -0.078, y: -0.052, z: -0.308}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 3595082874454761980}
   m_Father: {fileID: 3906642982268185609}
   m_LocalEulerAnglesHint: {x: 147.207, y: -89.68298, z: -90.948}
 --- !u!33 &8439836844913517512
@@ -1691,6 +1692,37 @@ Transform:
   - {fileID: 122508922100539212}
   m_Father: {fileID: 8334192508544531098}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4903180623369358753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3595082874454761980}
+  m_Layer: 0
+  m_Name: FirePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3595082874454761980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4903180623369358753}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.071, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1180310654725918657}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5350746950515791228
 GameObject:
   m_ObjectHideFlags: 0
@@ -1959,8 +1991,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSO: {fileID: 11400000, guid: fcf7c14c2f1476a4ca1d36cc3732ee1a, type: 2}
-  activeSO: {fileID: 11400000, guid: a74aa993eea1ea6429dfb1546145e171, type: 2}
+  activeSkillSO: {fileID: 11400000, guid: e9402dc77f8866c449cc88037dd53d09, type: 2}
   selectedMarker: {fileID: 2627403377857210514}
+  skillIndex: 2
+  skillTimer: 0
+  fireBallPrefab: {fileID: 0}
+  firePos: {fileID: 0}
+  skillCursor: {fileID: 2800000, guid: 331b54956b0b5bb4ca2472019243746e, type: 3}
 --- !u!136 &3901889039677906327
 CapsuleCollider:
   m_ObjectHideFlags: 0

@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff4d8ec6c218ed847b3ab84cc0c2eecd, type: 3}
-  m_Name: "Active_\uC0AC\uC81C_\uBCF4\uD638"
+  m_Name: "Active_\uC0AC\uC81C_\uD790"
   m_EditorClassIdentifier: 
   id: 2004
   className: "\uC0AC\uC81C"
-  skillName: "\uBCF4\uD638"
+  skillName: "\uD790"
   value: 50
   coolTime: 30
   manaConsum: 1

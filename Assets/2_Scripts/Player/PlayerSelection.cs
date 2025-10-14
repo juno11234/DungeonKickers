@@ -12,7 +12,7 @@ public class PlayerSelection : MonoBehaviour
     private Dictionary<int, List<PlayerUnit>> _unitDesignations = new Dictionary<int, List<PlayerUnit>>();
 
     TargetingSkillerBase currentTargetingSkiller;
-    public event Action<Texture2D, float> targetSkillChageEvent;
+    public event Action<Texture2D, float, bool> targetSkillChageEvent;
 
     [Header("Move Settings")]
     public float spreadRadius = 1f;
@@ -104,20 +104,33 @@ public class PlayerSelection : MonoBehaviour
     }
 
     //커서만 바꿈
-    public void TargetingCursorChange(Texture2D skillCursor, float range)
+    public void TargetingCursorChange(Texture2D skillCursor, float skillDis, bool wide)
     {
         //어떻게 스킬범위에맞게 마우스 커서를 만들어주지?
         //레이를 업데이트로 쏘게 만들어서 계속 따라다니게 만든다
-        targetSkillChageEvent?.Invoke(skillCursor, range);
+        targetSkillChageEvent?.Invoke(skillCursor, skillDis, wide);
     }
     //스킬발동 확정
-    public void TargetingSkillUse(Vector3 pos)
+    public void TargetingSkillUse(Vector3 pos, RaycastHit rayHit)
     {
         //어떻게 파이어볼에게 pos를 전달해주지?
+
+        if (currentTargetingSkiller is Player_Priest priest)
+        {
+            if (rayHit.transform.gameObject.TryGetComponent(out PlayerUnit unit))
+            {
+                priest.StartFollowAndCast(unit);
+            }
+            return;
+        }
         currentTargetingSkiller.TargetPos = pos;
-        currentTargetingSkiller.Skill();
+        currentTargetingSkiller.RangeCheck();
     }
 
+    public void CancelTargeting(bool lmb)
+    {
+        currentTargetingSkiller.TargetCancel(lmb);
+    }
     // 유닛 명령 공통 처리
     private void CommandSelectedUnits(Vector3 position, bool useDetector, Action<PlayerUnit, Vector3> command)
     {

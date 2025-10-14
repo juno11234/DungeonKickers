@@ -26,6 +26,7 @@ public class ControlManager : MonoBehaviour
     [SerializeField] private Texture2D Pcursor;
 
     [SerializeField] private RectTransform selectionBox;
+    [SerializeField] private GameObject skillRadius;
 
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask detectorLayer;
@@ -36,8 +37,10 @@ public class ControlManager : MonoBehaviour
     private Camera _mainCam;
     private bool _isShiftPressed;
     private bool _isDragging = false;
+    private bool _isWide = false;
     private Vector2 _startMousePos;
     private KeyType _keyType;
+
 
     void Start()
     {
@@ -59,6 +62,7 @@ public class ControlManager : MonoBehaviour
 
         selectionBox.gameObject.SetActive(false);
         _playerSelection.targetSkillChageEvent += TargetSkillReady;
+        skillRadius.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -67,6 +71,18 @@ public class ControlManager : MonoBehaviour
         {
             Vector2 currentMousePos = Mouse.current.position.ReadValue();
             UpdateSelectionBox(_startMousePos, currentMousePos);
+        }
+        if (_isWide)
+        {
+            Vector3 mousePosition = Mouse.current.position.ReadValue();
+            Ray ray = _mainCam.ScreenPointToRay(mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 50f, groundLayer))
+            {
+                Vector3 pos = new Vector3(hit.point.x, 1f, hit.point.z);
+
+                skillRadius.transform.position = pos;
+            }
         }
     }
 
@@ -105,15 +121,29 @@ public class ControlManager : MonoBehaviour
     }
     Texture2D currentTargetCursor;
     //커서 변경시
-    private void TargetSkillReady(Texture2D Cursor, float range)
+    private void TargetSkillReady(Texture2D Cursor, float skillDis, bool wide)
     {
         currentTargetCursor = Cursor;
+
+        if (wide)
+        {
+            _isWide = wide;
+            skillRadius.transform.localScale = new Vector3(skillDis, skillDis, 0f);
+            skillRadius.gameObject.SetActive(true);
+        }
+
         KeyTypeInput(true, KeyType.TargetingSkill);
     }
 
     //입력된 키 취소
-    private void ResetControlMode()
+    private void ResetControlMode(bool lmb)
     {
+        if (_keyType == KeyType.TargetingSkill)
+        {
+            _isWide = false;
+            _playerSelection.CancelTargeting(lmb);
+            skillRadius.gameObject.SetActive(false);
+        }
         _keyType = KeyType.None;
         Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
     }
@@ -147,20 +177,20 @@ public class ControlManager : MonoBehaviour
         {
             case KeyType.P:
                 HandleGroundOrEnemyInput(mousePos, KeyType.P);
-                ResetControlMode();
+                ResetControlMode(true);
                 return;
             case KeyType.A:
                 HandleGroundOrEnemyInput(mousePos, KeyType.A);
-                ResetControlMode();
+                ResetControlMode(true);
                 return;
             case KeyType.M:
                 // Move 모드일 때는 우클릭 로직과 동일
                 HandleGroundOrEnemyInput(mousePos, KeyType.M);
-                ResetControlMode();
+                ResetControlMode(true);
                 return;
             case KeyType.TargetingSkill:
                 HandleTargetSkill(mousePos);
-                ResetControlMode();
+                ResetControlMode(true);
                 return;
         }
 
@@ -265,7 +295,7 @@ public class ControlManager : MonoBehaviour
     //우클릭 로직
     private void RMBInput(Vector2 mousePos)
     {
-        ResetControlMode();
+        ResetControlMode(false);
 
         HandleGroundOrEnemyInput(mousePos, KeyType.M);
     }
@@ -309,7 +339,7 @@ public class ControlManager : MonoBehaviour
         Ray ray = _mainCam.ScreenPointToRay(mousePos);
         if (Physics.Raycast(ray, out RaycastHit hit, 50f, ~detectorLayer))
         {
-            _playerSelection.TargetingSkillUse(hit.point);
+            _playerSelection.TargetingSkillUse(hit.point, hit);
         }
     }
 

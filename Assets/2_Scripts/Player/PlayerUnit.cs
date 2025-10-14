@@ -420,7 +420,10 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     {
         detector.gameObject.SetActive(true);
     }
+    public void TakeHeal()
+    {
 
+    }
     public void TakeDamage(CombatEvent combatEvent)
     {
         if (isDead) return;

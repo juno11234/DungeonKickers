@@ -10,7 +10,7 @@ public class Player_Mage : TargetingSkillerBase
     [SerializeField] private Texture2D skillCursor;
 
     private float fireBallRadius = 5f;
- 
+
     public override void CursorChange()
     {
         InvokeCursorChange(skillCursor, 2 * fireBallRadius, true);
@@ -20,6 +20,6 @@ public class Player_Mage : TargetingSkillerBase
     {
         Skill();
         FireBall fireBall = Instantiate(fireBallPrefab, firePos.position, Quaternion.identity);
-        fireBall.Init(TargetPos, fireBallRadius);
+        fireBall.Init(this, activeSkillSO.value, TargetPos, fireBallRadius);
     }
 }

@@ -11,6 +11,14 @@ public class Player_Rogue : PlayerUnit
         //이속 공속 증가 코루틴
         base.Skill();
         StartCoroutine(SpeedBuff());
+        CombatEvent combatEvents = new()
+        {
+            Sender = this,
+            Receiver = this,
+            Damage = 10,
+            Collider = MainCollider
+        };
+        CombatSystem.Instance.AddInGameEvent(combatEvents);
     }
     IEnumerator SpeedBuff()
     {

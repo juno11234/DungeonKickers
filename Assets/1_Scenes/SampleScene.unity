@@ -9891,6 +9891,14 @@ PrefabInstance:
       propertyPath: shielPrefab
       value: 
       objectReference: {fileID: 1560039214094942917, guid: 1e7404c078092c44a89f92a3d39f5e8c, type: 3}
+    - target: {fileID: 5529921359347979558, guid: 5f2d95afa9177524abadb07435dd70cb, type: 3}
+      propertyPath: skillCursor
+      value: 
+      objectReference: {fileID: 2800000, guid: d725ddcc5d0b1d04f9db4aca08ef88b3, type: 3}
+    - target: {fileID: 5529921359347979558, guid: 5f2d95afa9177524abadb07435dd70cb, type: 3}
+      propertyPath: healEffectPrefab
+      value: 
+      objectReference: {fileID: 1560039214094942917, guid: 1e7404c078092c44a89f92a3d39f5e8c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

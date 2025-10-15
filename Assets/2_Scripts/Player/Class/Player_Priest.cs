@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player_Priest : TargetingSkillerBase
 {
-    [SerializeField] private GameObject healEffectPrefab;
+    [SerializeField] private Heal healEffectPrefab;
     [SerializeField] private Texture2D skillCursor;
     public PlayerUnit TargetPlayer { get; set; }
 
@@ -14,20 +14,22 @@ public class Player_Priest : TargetingSkillerBase
     protected override void CastSkill()
     {
         if (TargetPlayer == null) return;
+        int tickHeal = activeSkillSO.value / 5;
 
-        GameObject effect = Instantiate(
+        Heal healPrefab = Instantiate(
             healEffectPrefab,
             TargetPlayer.transform.position,
             Quaternion.identity,
             TargetPlayer.transform
         );
 
+        healPrefab.Init(tickHeal, 5, this, TargetPlayer);
         // 이펙트 위치 미세 조정 (ex. 머리 위로 올리고 싶을 때)
-        effect.transform.localPosition = new Vector3(0, 1.5f, 0);
+        healPrefab.transform.localPosition = new Vector3(0, 1.5f, 0);
 
-        TargetPlayer.TakeHeal(); // 힐 함수 (직접 구현 필요)
         Skill(); // 쿨타임 적용
     }
+
     public void StartFollowAndCast(PlayerUnit target)
     {
         TargetPlayer = target;

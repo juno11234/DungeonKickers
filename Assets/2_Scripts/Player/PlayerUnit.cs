@@ -420,9 +420,15 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     {
         detector.gameObject.SetActive(true);
     }
-    public void TakeHeal()
+    public void TakeHeal(HealEvent healEvent)
     {
+        if (isDead) return;
 
+        _stats.hp += healEvent.Heal;
+        if (_stats.hp > _stats.maxHp)
+        {
+            _stats.hp = _stats.maxHp;
+        }
     }
     public void TakeDamage(CombatEvent combatEvent)
     {
@@ -431,6 +437,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         if (dmg > 0)
         {
             _stats.hp -= dmg;
+
         }
         else
         {

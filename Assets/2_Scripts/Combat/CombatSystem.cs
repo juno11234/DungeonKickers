@@ -36,6 +36,10 @@ public class CombatSystem : MonoBehaviour
                     var combatEvent = inGameEvent as CombatEvent;
                     inGameEvent.Receiver.TakeDamage(combatEvent);
                     break;
+                case InGameEvent.EventType.Heal:
+                    var healEvent = inGameEvent as HealEvent;
+                    inGameEvent.Receiver.TakeHeal(healEvent);
+                    break;
             }
 
             processCount++;

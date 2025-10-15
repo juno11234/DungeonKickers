@@ -2,6 +2,32 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
+// PlayerUnit.cs에 UnitStats 구조체가 정의되어 있다고 가정합니다.
+// 만약 다른 파일에 있다면 해당 네임스페이스를 using 하거나,
+// 이 파일 내에 구조체 정의를 추가해야 합니다.
+/*
+[System.Serializable]
+public struct UnitStats
+{
+    public int maxHp;
+    public int hp;
+    public float attackRange;
+    public float attackSpeed;
+    public int guard;
+    public float moveSpeed;
+
+    public UnitStats(int hp, float attackRange, float attackSpeed, int guard, float moveSpeed)
+    {
+        this.maxHp = hp;
+        this.hp = hp;
+        this.attackRange = attackRange;
+        this.attackSpeed = attackSpeed;
+        this.guard = guard;
+        this.moveSpeed = moveSpeed;
+    }
+}
+*/
+
 public abstract class EnemyBase : MonoBehaviour, IFighter
 {
     [SerializeField] MonsterDataSo monsterSO;
@@ -14,11 +40,12 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
     private Animator animator;
     private NavMeshAgent agent;
     private IFighter target;
-    private float attackRange;
-    private float attackSpeed;
+
+    // 기존 개별 능력치를 UnitStats 구조체로 대체
+    private UnitStats _stats;
+
     private float originalAttackAnimLength;
     private float attackAniSpeed;
-    private int hp;
     private bool isDead = false;
 
     private void Start()
@@ -28,21 +55,27 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
         agent = GetComponent<NavMeshAgent>();
         detector = GetComponentInChildren<Detector>();
 
-        hp = monsterSO.hp;
-        agent.speed = monsterSO.moveSpeed;
-        attackRange = monsterSO.attackRange;
-        attackSpeed = monsterSO.attackSpeed;
+        // MonsterDataSO로부터 UnitStats 초기화
+        _stats = new UnitStats(
+            monsterSO.hp,
+            monsterSO.attackRange,
+            monsterSO.attackSpeed,
+            0, // 몬스터는 방어력이 없으므로 0으로 설정
+            monsterSO.moveSpeed
+        );
+
+        agent.speed = _stats.moveSpeed;
         detector.coll.radius = 12;
 
         originalAttackAnimLength = GetAnimationLength("Attack");
-        float desiredDuration = 1f / attackSpeed;
+        float desiredDuration = 1f / _stats.attackSpeed;
         attackAniSpeed = originalAttackAnimLength / desiredDuration;
 
         detector.OnTargetFind += AttackTargetSet;
 
-
         CombatSystem.Instance.RegisterMonster(this);
     }
+
     private void Update()
     {
         if (agent.velocity.magnitude > 0)
@@ -59,14 +92,12 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
 
     private float GetAnimationLength(string stateName)
     {
-        // AnimatorController가 있는지 확인
         if (animator == null || animator.runtimeAnimatorController == null)
         {
             Debug.LogError("Animator 또는 AnimatorController가 할당되지 않았습니다.");
             return 0f;
         }
 
-        // 모든 상태를 순회하며 "Attack" 상태를 찾습니다.
         foreach (var state in animator.runtimeAnimatorController.animationClips)
         {
             if (state.name.Contains(stateName))
@@ -81,7 +112,6 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
 
     private void AttackOrChase()
     {
-
         if (target != null && isDead == false)
         {
             if (target.OnDie)
@@ -93,13 +123,11 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
                 return;
             }
             transform.LookAt(target.GameObject.transform.position, Vector3.up);
-            // 대상과의 거리 계산
             float distance = Vector3.Distance(transform.position, target.GameObject.transform.position);
 
-            // 사거리 안에 들어오면 공격 시작
-            if (distance <= attackRange)
+            // attackRange 대신 _stats.attackRange 사용
+            if (distance <= _stats.attackRange)
             {
-                // 이동을 멈춥니다.
                 agent.ResetPath();
                 animator.SetFloat("attackSpeed", attackAniSpeed);
             }
@@ -107,7 +135,6 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
             {
                 Move(target.GameObject.transform.position);
             }
-
         }
     }
 
@@ -130,16 +157,21 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
 
     public void Move(Vector3 position)
     {
-        // 이동 명령 시 공격 대상 초기화
         animator.SetFloat("attackSpeed", 0);
         agent.destination = position;
     }
 
+    public void TakeHeal(HealEvent heal)
+    {
+
+    }
     public void TakeDamage(CombatEvent combatEvent)
     {
         if (isDead) return;
-        hp -= combatEvent.Damage;
-        if (hp <= 0)
+
+        // hp 대신 _stats.hp 사용
+        _stats.hp -= combatEvent.Damage;
+        if (_stats.hp <= 0)
         {
             Die();
         }
@@ -154,5 +186,4 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
         _collider.enabled = false;
         agent.enabled = false;
     }
-
 }

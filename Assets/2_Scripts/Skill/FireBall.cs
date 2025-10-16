@@ -26,6 +26,7 @@ public class FireBall : MonoBehaviour
         coll.radius = radius;
         coll.enabled = false;
         effect.SetActive(false);
+        boomRadius.SetActive(false);
     }
 
     void Update()
@@ -37,6 +38,7 @@ public class FireBall : MonoBehaviour
         if (Vector3.Distance(transform.position, targetPos) < 0.1f)
         {
             effect.SetActive(true);
+            boomRadius.SetActive(true);
             coll.enabled = true;
             timer += Time.deltaTime;
         }

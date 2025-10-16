@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 [System.Serializable]
@@ -38,6 +39,12 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     [SerializeField] protected ActiveSkillSO activeSkillSO;
     [SerializeField] private GameObject selectedMarker;
     [SerializeField] private int skillIndex;
+    [SerializeField] private RectTransform canvasRect;
+    [SerializeField] private HPBar hpBarPrefab;
+
+
+
+    public event Action<int, int> HpChanged;
 
     protected EUnitState _currentState;
 
@@ -45,6 +52,9 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     public GameObject GameObject => gameObject;
     public Detector Detector => detector;
     public bool OnDie => isDead;
+    public int CurrentHp => _stats.hp;
+    public int MaxHp => _stats.maxHp;
+
 
     private Collider _myCollider;
     private Animator _myAnimator;
@@ -82,6 +92,13 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
 
         detector.OnTargetFind += AttackTargetSet;
         _currentState = EUnitState.Idle;
+
+        SpawnUnit(this);
+    }
+    void SpawnUnit(PlayerUnit unit)
+    {
+        var bar = Instantiate(hpBarPrefab, canvasRect);
+        bar.Init(unit, canvasRect);
     }
 
     protected void SpeedSet(float speedBuff, float atkSpeedBuff)
@@ -429,6 +446,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         {
             _stats.hp = _stats.maxHp;
         }
+        HpChanged?.Invoke(_stats.hp, _stats.maxHp);
     }
     public void TakeDamage(CombatEvent combatEvent)
     {
@@ -448,6 +466,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         {
             SetState(EUnitState.Die); // [수정] Die() 직접 호출 대신 SetState 호출
         }
+        HpChanged?.Invoke(_stats.hp, _stats.maxHp);
     }
 
 }

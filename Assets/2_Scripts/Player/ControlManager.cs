@@ -176,21 +176,17 @@ public class ControlManager : MonoBehaviour
         switch (_keyType)
         {
             case KeyType.P:
-                HandleGroundOrEnemyInput(mousePos, KeyType.P);
-                ResetControlMode(true);
+                HandleGroundOrEnemyInput(mousePos, KeyType.P);                
                 return;
             case KeyType.A:
                 HandleGroundOrEnemyInput(mousePos, KeyType.A);
-                ResetControlMode(true);
                 return;
             case KeyType.M:
                 // Move 모드일 때는 우클릭 로직과 동일
                 HandleGroundOrEnemyInput(mousePos, KeyType.M);
-                ResetControlMode(true);
                 return;
             case KeyType.TargetingSkill:
                 HandleTargetSkill(mousePos);
-                ResetControlMode(true);
                 return;
         }
 
@@ -209,6 +205,7 @@ public class ControlManager : MonoBehaviour
         // 모드가 활성화된 상태라면 드래그 선택 로직 무시
         if (_keyType != KeyType.None)
         {
+            ResetControlMode(true);
             return;
         }
 

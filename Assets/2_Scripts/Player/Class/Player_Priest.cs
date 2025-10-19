@@ -17,15 +17,15 @@ public class Player_Priest : TargetingSkillerBase
         int tickHeal = activeSkillSO.value / 5;
 
         Heal healPrefab = Instantiate(
-            healEffectPrefab,
-            TargetPlayer.transform.position,
-            Quaternion.identity,
-            TargetPlayer.transform
+         healEffectPrefab,
+         TargetPlayer.transform               // 부모 지정
         );
+
+        healPrefab.transform.localPosition = Vector3.zero;
+        healPrefab.transform.localRotation = Quaternion.identity;
 
         healPrefab.Init(tickHeal, 5, this, TargetPlayer);
         // 이펙트 위치 미세 조정 (ex. 머리 위로 올리고 싶을 때)
-        healPrefab.transform.localPosition = new Vector3(0, 1.5f, 0);
 
         Skill(); // 쿨타임 적용
     }

@@ -7,5 +7,5 @@ public class ActiveSkillSO : BaseDataSO
     public int value;
     public float coolTime;
     public int manaConsum;
-    public Sprite skillIcon;
+    public GameObject skillIcon;
 }

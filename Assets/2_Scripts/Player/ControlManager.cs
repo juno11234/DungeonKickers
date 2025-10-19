@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 public class ControlManager : MonoBehaviour
 {
-    private enum KeyType
+    public enum KeyType
     {
         None,
         A,
@@ -119,6 +119,18 @@ public class ControlManager : MonoBehaviour
             }
         }
     }
+    public void AKeyInputForButton()
+    {
+        KeyTypeInput(true, KeyType.A);
+    }
+    public void MKeyInputForButton()
+    {
+        KeyTypeInput(true, KeyType.M);
+    }
+    public void PKeyInputForButton()
+    {
+        KeyTypeInput(true, KeyType.P);
+    }
     Texture2D currentTargetCursor;
     //커서 변경시
     private void TargetSkillReady(Texture2D Cursor, float skillDis, bool wide)
@@ -176,7 +188,7 @@ public class ControlManager : MonoBehaviour
         switch (_keyType)
         {
             case KeyType.P:
-                HandleGroundOrEnemyInput(mousePos, KeyType.P);                
+                HandleGroundOrEnemyInput(mousePos, KeyType.P);
                 return;
             case KeyType.A:
                 HandleGroundOrEnemyInput(mousePos, KeyType.A);
@@ -355,5 +367,5 @@ public class ControlManager : MonoBehaviour
 
         return results.Count > 0;
     }
-
+  
 }

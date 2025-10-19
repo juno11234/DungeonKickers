@@ -54,7 +54,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     public bool OnDie => isDead;
     public int CurrentHp => _stats.hp;
     public int MaxHp => _stats.maxHp;
-
+    public bool SkillAble => skillAble;
 
     private Collider _myCollider;
     private Animator _myAnimator;
@@ -468,5 +468,16 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         }
         HpChanged?.Invoke(_stats.hp, _stats.maxHp);
     }
-
+    public GameObject GetSkillIconUI()
+    {
+        return activeSkillSO.skillIcon;
+    }
+    public int GetSkillID()
+    {
+        return activeSkillSO.id;
+    }
+    public float GetSkillCool()
+    {
+        return activeSkillSO.coolTime;
+    }
 }

@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class PlayerSelection : MonoBehaviour
 {
     [SerializeField] private PlayerUnit[] allPlayer;
+   
+    [SerializeField] private UIManager uiManager;
+
     // List 대신 HashSet을 사용하여 중복을 방지하고 추가/제거/검색 성능을 향상
     private HashSet<PlayerUnit> _selectedPlayers = new HashSet<PlayerUnit>();
     private Dictionary<int, List<PlayerUnit>> _unitDesignations = new Dictionary<int, List<PlayerUnit>>();
@@ -19,15 +22,17 @@ public class PlayerSelection : MonoBehaviour
 
     private void Start()
     {
-        foreach (var player in allPlayer)
+        for (int i = 0; i < allPlayer.Length; i++)
         {
-            if (player is TargetingSkillerBase targetingSkiller)
+            if (allPlayer[i] is TargetingSkillerBase targetingSkiller)
             {
                 targetingSkiller.cursorChangeEvent += TargetingCursorChange;
             }
+            
         }
+        uiManager.InitializeUI(allPlayer);
     }
-
+  
     // 유닛 선택
     public void SelectUnit(PlayerUnit playerUnit, bool isShiftPressed)
     {
@@ -41,6 +46,8 @@ public class PlayerSelection : MonoBehaviour
         {
             playerUnit.Selected();
         }
+
+        uiManager.ActivateSkillIcons(_selectedPlayers);
     }
 
     public void DeselectAllUnit()
@@ -49,9 +56,11 @@ public class PlayerSelection : MonoBehaviour
         {
             if (player != null) // 유닛이 파괴되었을 경우를 대비
             {
-                player.deSelected();
+                
+                player.deSelected();              
             }
         }
+        uiManager.DeactivateSkillIcons(_selectedPlayers);
         _selectedPlayers.Clear();
     }
 
@@ -80,6 +89,7 @@ public class PlayerSelection : MonoBehaviour
                 unit.Selected();
             }
         }
+        uiManager.ActivateSkillIcons(_selectedPlayers);
     }
     //스킬사용이가능한가
 

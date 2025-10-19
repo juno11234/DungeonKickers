@@ -18,4 +18,4 @@ MonoBehaviour:
   value: 2
   coolTime: 40
   manaConsum: 0
-  skillIcon: {fileID: 0}
+  skillIcon: {fileID: 1661908745451413291, guid: 5bd393394810e054c9a0d3a50314413f, type: 3}

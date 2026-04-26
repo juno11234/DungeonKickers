@@ -15,7 +15,7 @@ MonoBehaviour:
   id: 2001
   className: "\uC804\uC0AC"
   skillName: "\uACAC\uB514\uAE30"
-  value: 5
-  coolTime: 40
+  value: 3
+  coolTime: 60
   manaConsum: 0
   skillIcon: {fileID: 1073426584574878750, guid: ae227ad3a58ec364cb5150c63b139d0c, type: 3}

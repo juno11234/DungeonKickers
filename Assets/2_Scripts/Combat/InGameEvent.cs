@@ -6,7 +6,8 @@ public abstract class InGameEvent
     {
         Unknown,
         Combat,
-        Heal
+        Heal,
+        EXP
     }
 
     public IFighter Sender { get; set; }
@@ -24,4 +25,10 @@ public class HealEvent : InGameEvent
 {
     public override EventType Type => EventType.Heal;
     public int Heal { get; set; }
+}
+public class EXPEvnet : InGameEvent
+{
+    public override EventType Type => EventType.EXP;
+    public float Exp { get; set; }
+    
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "MonsterData", menuName = "Data/MonsterData")]
 public class MonsterDataSo : UnitDataSO
 {
+    public string Job;
     public int hp;
     public int attackDamage;
     public float attackSpeed;
@@ -12,6 +13,6 @@ public class MonsterDataSo : UnitDataSO
 
     public override UnitStats GetUnitStats()
     {
-        return new UnitStats(hp, attackRange, attackSpeed, 0, moveSpeed);
+        return new UnitStats(hp, attackRange, attackSpeed, 0, moveSpeed, attackDamage, Job);
     }
 }

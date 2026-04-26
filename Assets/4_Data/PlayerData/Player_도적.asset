@@ -14,12 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1002
   job: "\uB3C4\uC801"
-  level: 1
-  exp: 0
-  hp: 150
-  attackDamage: 6
-  defence: 1
+  hp: 100
+  attackDamage: 3
+  defence: 0
   moveSpeed: 5
   attackSpeed: 1
   mana: -1
   attackRange: 8
+  portrait: {fileID: 21300000, guid: 9b211105fe6893b47911f78449d176ab, type: 3}

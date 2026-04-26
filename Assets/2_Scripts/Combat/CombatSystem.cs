@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CombatSystem : MonoBehaviour
 {
+    [SerializeField] private EXPManager _EXPManager;
     private const int Max_Event_COUNT = 10;
 
     public class Callback //이벤트추가
@@ -39,6 +40,10 @@ public class CombatSystem : MonoBehaviour
                 case InGameEvent.EventType.Heal:
                     var healEvent = inGameEvent as HealEvent;
                     inGameEvent.Receiver.TakeHeal(healEvent);
+                    break;
+                case InGameEvent.EventType.EXP:
+                    var expEvent = inGameEvent as EXPEvnet;
+                    _EXPManager.AddExp(expEvent.Exp);
                     break;
             }
 

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: TestSkeleton
   m_EditorClassIdentifier: 
   id: 0
+  Job: skeleton
   hp: 15
   attackDamage: 30
   attackSpeed: 0.5

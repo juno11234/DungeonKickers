@@ -15,10 +15,11 @@ public class Player_Warrior : PlayerUnit
     {
         _stats.guard += activeSkillSO.value;
         buffEffect.SetActive(true);
-
+        InvokedStatChange();
         yield return new WaitForSeconds(buffTime);
 
         _stats.guard -= activeSkillSO.value;
         buffEffect.SetActive(false);
+        InvokedStatChange();
     }
 }

@@ -4,16 +4,20 @@ using UnityEngine.AI;
 [System.Serializable]
 public struct UnitStats
 {
+    public string name;
     public int maxHp;
     public int hp;
+    public int damage;
     public float attackRange;
     public float attackSpeed;
     public int guard;
     public float moveSpeed;
 
     // 모든 필드를 초기화하는 생성자
-    public UnitStats(int hp, float attackRange, float attackSpeed, int guard, float moveSpeed)
+    public UnitStats(int hp, float attackRange, float attackSpeed, int guard, float moveSpeed, int damage, string name)
     {
+        this.name = name;
+        this.damage = damage;
         this.maxHp = hp;
         this.hp = hp;
         this.attackRange = attackRange;
@@ -41,20 +45,21 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     [SerializeField] private int skillIndex;
     [SerializeField] private RectTransform canvasRect;
     [SerializeField] private HPBar hpBarPrefab;
-
-
+    [SerializeField] private GameObject miniMap;
 
     public event Action<int, int> HpChanged;
-
+    public event Action<int, int> StatChanged;
     protected EUnitState _currentState;
 
     public Collider MainCollider => _myCollider;
     public GameObject GameObject => gameObject;
     public Detector Detector => detector;
     public bool OnDie => isDead;
+    public bool SkillAble => skillAble;
+
+    public UnitStats Stats => _stats;
     public int CurrentHp => _stats.hp;
     public int MaxHp => _stats.maxHp;
-    public bool SkillAble => skillAble;
 
     private Collider _myCollider;
     private Animator _myAnimator;
@@ -75,7 +80,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     public float skillTimer;
     protected bool skillAble = true;
 
-    private void Start()
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         _myCollider = GetComponent<Collider>();
@@ -304,6 +309,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
                 _myAnimator.SetTrigger("Die");
                 isDead = true;
                 agent.enabled = false;
+                miniMap.gameObject.SetActive(false);
                 break;
         }
     }
@@ -353,7 +359,7 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
         {
             Sender = this,
             Receiver = _targetMonster,
-            Damage = playerSO.attackDamage,
+            Damage = _stats.damage,
             Collider = _targetMonster.MainCollider
         };
         CombatSystem.Instance.AddInGameEvent(combatEvents);
@@ -479,5 +485,38 @@ public abstract class PlayerUnit : MonoBehaviour, IFighter
     public float GetSkillCool()
     {
         return activeSkillSO.coolTime;
+    }
+    public Sprite GetPortrait()
+    {
+        return playerSO.portrait;
+    }
+    protected void InvokedStatChange()
+    {
+        StatChanged?.Invoke(_stats.damage, _stats.guard);
+    }
+    public void ApplyPassiveSkill(BuffType type, int currentLevel)
+    {
+        switch (type)
+        {
+            case BuffType.Hp:
+                _stats.maxHp += 50 * currentLevel;
+                _stats.hp = _stats.maxHp;
+                break;
+            case BuffType.Atk:
+                _stats.damage += 5 * currentLevel;
+                break;
+            case BuffType.Ats:
+                _stats.attackSpeed += 0.1f * currentLevel;
+                break;
+            case BuffType.Def:
+                _stats.guard += 2 * currentLevel;
+                break;
+            case BuffType.Speed:
+                _stats.moveSpeed += 0.2f * currentLevel;
+                SpeedSet(0, 0);
+                break;
+        }
+        InvokedStatChange();
+        
     }
 }

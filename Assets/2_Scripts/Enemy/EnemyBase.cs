@@ -2,35 +2,10 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-// PlayerUnit.cs에 UnitStats 구조체가 정의되어 있다고 가정합니다.
-// 만약 다른 파일에 있다면 해당 네임스페이스를 using 하거나,
-// 이 파일 내에 구조체 정의를 추가해야 합니다.
-/*
-[System.Serializable]
-public struct UnitStats
-{
-    public int maxHp;
-    public int hp;
-    public float attackRange;
-    public float attackSpeed;
-    public int guard;
-    public float moveSpeed;
-
-    public UnitStats(int hp, float attackRange, float attackSpeed, int guard, float moveSpeed)
-    {
-        this.maxHp = hp;
-        this.hp = hp;
-        this.attackRange = attackRange;
-        this.attackSpeed = attackSpeed;
-        this.guard = guard;
-        this.moveSpeed = moveSpeed;
-    }
-}
-*/
-
 public abstract class EnemyBase : MonoBehaviour, IFighter
 {
     [SerializeField] MonsterDataSo monsterSO;
+    [SerializeField] GameObject miniMap;
     public Collider MainCollider => _collider;
     public GameObject GameObject => gameObject;
     public bool OnDie => isDead;
@@ -61,7 +36,9 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
             monsterSO.attackRange,
             monsterSO.attackSpeed,
             0, // 몬스터는 방어력이 없으므로 0으로 설정
-            monsterSO.moveSpeed
+            monsterSO.moveSpeed,
+            monsterSO.attackDamage,
+            monsterSO.name
         );
 
         agent.speed = _stats.moveSpeed;
@@ -179,11 +156,18 @@ public abstract class EnemyBase : MonoBehaviour, IFighter
 
     void Die()
     {
+        EXPEvnet expEvent = new()
+        {
+            Exp=monsterSO.EXP
+        };
+        CombatSystem.Instance.AddInGameEvent(expEvent);
+
         isDead = true;
         CombatSystem.Instance.ReMoveDictionary(this);
         animator.SetTrigger("Die");
         detector.DictionaryReset();
         _collider.enabled = false;
         agent.enabled = false;
+        miniMap.SetActive(false);
     }
 }

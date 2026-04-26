@@ -11,9 +11,9 @@ public class PlayerDataSO : UnitDataSO
     public float attackSpeed;
     public int mana;
     public float attackRange;
-
+    public Sprite portrait;
     public override UnitStats GetUnitStats()
     {
-        return new UnitStats(hp, attackRange, attackSpeed, defence, moveSpeed);
+        return new UnitStats(hp, attackRange, attackSpeed, defence, moveSpeed, attackDamage, job);
     }
 }
